@@ -7,11 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserCreateDtoMapper {
 
-    private final ModelMapper modelMapper;
-
-    public UserCreateDtoMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
-    }
+    private final ModelMapper modelMapper = new ModelMapper();
 
 
     public UserCreateDto convertToDto(User user){

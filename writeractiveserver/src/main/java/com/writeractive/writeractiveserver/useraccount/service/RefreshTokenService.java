@@ -1,8 +1,8 @@
 package com.writeractive.writeractiveserver.useraccount.service;
 
-import com.writeractive.writeractiveserver.exception.RefreshTokenNotFoundException;
-import com.writeractive.writeractiveserver.exception.TokenRefreshException;
-import com.writeractive.writeractiveserver.exception.UserNotFoundException;
+import com.writeractive.writeractiveserver.useraccount.exception.RefreshTokenNotFoundException;
+import com.writeractive.writeractiveserver.useraccount.exception.TokenRefreshException;
+import com.writeractive.writeractiveserver.useraccount.exception.UserNotFoundException;
 import com.writeractive.writeractiveserver.useraccount.model.RefreshToken;
 import com.writeractive.writeractiveserver.useraccount.model.User;
 import com.writeractive.writeractiveserver.useraccount.repository.RefreshTokenRepository;

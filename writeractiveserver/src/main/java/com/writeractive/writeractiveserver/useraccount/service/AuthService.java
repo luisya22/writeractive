@@ -1,7 +1,7 @@
 package com.writeractive.writeractiveserver.useraccount.service;
 
-import com.writeractive.writeractiveserver.exception.RoleNotFoundException;
-import com.writeractive.writeractiveserver.exception.UserExistsException;
+import com.writeractive.writeractiveserver.useraccount.exception.RoleNotFoundException;
+import com.writeractive.writeractiveserver.useraccount.exception.UserExistsException;
 import com.writeractive.writeractiveserver.useraccount.dto.UserCreateDto;
 import com.writeractive.writeractiveserver.useraccount.dto.UserCreateDtoMapper;
 import com.writeractive.writeractiveserver.useraccount.model.Role;

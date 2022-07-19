@@ -1,4 +1,4 @@
-package com.writeractive.writeractiveserver.exception;
+package com.writeractive.writeractiveserver.useraccount.exception;
 
 public class UserExistsException extends RuntimeException {
 

@@ -4,10 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 
-public record ApiException(String message, HttpStatus httpStatus, ZonedDateTime timestamp) {
+public record ApiException(String message, HttpStatus httpStatus, LocalDateTime timestamp) {
 
     @Override
     public String message() {
@@ -20,7 +21,7 @@ public record ApiException(String message, HttpStatus httpStatus, ZonedDateTime 
     }
 
     @Override
-    public ZonedDateTime timestamp() {
+    public LocalDateTime timestamp() {
         return timestamp;
     }
 }

@@ -1,5 +1,7 @@
 package com.writeractive.writeractiveserver.useraccount.model;
 
+import com.writeractive.writeractiveserver.story.model.Story;
+import com.writeractive.writeractiveserver.util.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +12,14 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor @Getter @Setter @AllArgsConstructor
 @Entity
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,4 +44,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany
+    private List<Story> stories = new ArrayList<>();
 }

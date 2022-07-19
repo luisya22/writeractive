@@ -54,7 +54,7 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/api/users").authenticated()
+                .mvcMatchers(HttpMethod.POST, "/api/stories").authenticated()
                 .anyRequest().permitAll();
 
 //        http.addFilter(new CustomAuthenticationFilter(authenticationManager));

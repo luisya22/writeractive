@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<User> user = userRepository.findByUsername(email);
+        Optional<User> user = userRepository.findByEmail(email);
 
         if(user.isEmpty()){
             log.error("User not found in the database: {}", email);
