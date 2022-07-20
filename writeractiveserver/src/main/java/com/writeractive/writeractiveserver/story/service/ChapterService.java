@@ -36,9 +36,9 @@ public class ChapterService {
             throw new StoryNotFoundException("Story not found with id: " + storyId);
         }
 
-        chapterDto.setStoryId(storyId);
-
         Chapter chapter = chapterDtoMapper.convertToEntity(chapterDto);
+
+        chapter.setStory(story.get());
 
         Chapter chapterDb = chapterRepository.save(chapter);
 

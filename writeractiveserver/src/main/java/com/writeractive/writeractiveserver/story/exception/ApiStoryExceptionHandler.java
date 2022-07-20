@@ -12,8 +12,8 @@ import java.time.ZonedDateTime;
 @ControllerAdvice
 public class ApiStoryExceptionHandler {
 
-    @ExceptionHandler(value = {StoryNotFoundException.class})
-    public ResponseEntity<Object> handleNotFoundException(StoryNotFoundException e){
+    @ExceptionHandler(value = {StoryNotFoundException.class, ChapterNotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundException(RuntimeException e){
         ApiException apiException = new ApiException(
                 e.getMessage(),
                 HttpStatus.NOT_FOUND,

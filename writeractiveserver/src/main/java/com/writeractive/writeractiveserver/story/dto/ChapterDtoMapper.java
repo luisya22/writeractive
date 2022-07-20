@@ -19,21 +19,15 @@ public class ChapterDtoMapper {
     }
 
     public ChapterDto convertToDto(Chapter chapter){
-        return modelMapper.map(chapter, ChapterDto.class);
+
+        ChapterDto chapterDto = modelMapper.map(chapter, ChapterDto.class);
+
+        chapterDto.setStoryId(chapter.getStory().getId());
+
+        return chapterDto;
     }
 
     public Chapter convertToEntity(ChapterDto chapterDto){
-
-        Chapter chapter = modelMapper.map(chapterDto, Chapter.class);
-
-        Optional<Story> story;
-
-        if(chapterDto.getStoryId() != null){
-            story = storyRepository.findById(chapterDto.getStoryId());
-
-            story.ifPresent(chapter::setStory);
-        }
-
-        return chapter;
+        return modelMapper.map(chapterDto, Chapter.class);
     }
 }

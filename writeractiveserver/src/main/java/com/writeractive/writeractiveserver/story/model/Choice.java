@@ -8,13 +8,11 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Entity
-public class Chapter extends BaseEntity {
+public class Choice extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -25,20 +23,13 @@ public class Chapter extends BaseEntity {
     @Column(columnDefinition = "binary(16)")
     private UUID id;
 
-    @Column(columnDefinition = "text")
-    private String content;
-    private String title;
-
-    @Column(columnDefinition = "tinyint(1) default 0")
-    private boolean isFinalChapter;
-
-    @Column(columnDefinition = "tinyint(1) default 0")
-    private boolean published;
+    private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(columnDefinition = "binary(16)")
-    Story story;
+    @JoinColumn(name = "parent_chapter_id", columnDefinition = "binary(16)")
+    private Chapter parentChapter;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    List<Choice> choices = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "next_chapter_id", columnDefinition = "binary(16)")
+    private Chapter nextChapter;
 }
