@@ -13,7 +13,7 @@ public class ChoiceDtoMapper {
 
         ChoiceDto choiceDto = modelMapper.map(choice, ChoiceDto.class);
 
-        choiceDto.setParentId(choice.getParentChapter().getId());
+        choiceDto.setParentChapterId(choice.getParentChapter().getId());
         choiceDto.setNextChapterId(choice.getNextChapter().getId());
 
         return choiceDto;

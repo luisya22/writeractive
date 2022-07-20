@@ -4,14 +4,11 @@ import com.writeractive.writeractiveserver.story.dto.ChoiceDto;
 import com.writeractive.writeractiveserver.story.service.ChoiceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/api/chapters/{chapterId}/choices")
 public class ChoiceController {
 

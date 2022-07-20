@@ -8,11 +8,11 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class ChoiceDto {
+public class VariableDto {
 
     private UUID id;
     private String name;
-    private String text;
-    private UUID parentChapterId;
-    private UUID nextChapterId;
+    private String value;
+    private String type;
+    private UUID storyId;
 }

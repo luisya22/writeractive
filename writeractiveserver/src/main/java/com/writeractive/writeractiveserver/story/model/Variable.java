@@ -12,9 +12,7 @@ import java.util.UUID;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Entity
-public class Choice extends BaseEntity {
-
-    //TODO: Hide or show choices depending on variables
+public class Variable extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -26,13 +24,10 @@ public class Choice extends BaseEntity {
     private UUID id;
 
     private String name;
-    private String text;
+    private String value;
+    private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_chapter_id", columnDefinition = "binary(16)")
-    private Chapter parentChapter;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "next_chapter_id", columnDefinition = "binary(16)")
-    private Chapter nextChapter;
+    @ManyToOne
+    @JoinColumn(columnDefinition = "binary(16)")
+    private Story story;
 }
