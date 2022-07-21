@@ -44,4 +44,7 @@ public class Story extends BaseEntity {
 
     @OneToMany
     private List<Chapter> chapters = new ArrayList<>();
+
+    @OneToOne
+    private Chapter firstChapter;
 }

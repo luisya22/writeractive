@@ -55,6 +55,7 @@ public class SecurityConfig {
 
         http.authorizeRequests()
                 .mvcMatchers(HttpMethod.POST, "/api/stories").authenticated()
+                .mvcMatchers("/api/readings/**").authenticated()
                 .anyRequest().permitAll();
 
 //        http.addFilter(new CustomAuthenticationFilter(authenticationManager));

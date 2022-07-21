@@ -1,5 +1,6 @@
 package com.writeractive.writeractiveserver.story.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.writeractive.writeractiveserver.util.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class Chapter extends BaseEntity {
     private boolean published;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(columnDefinition = "binary(16)")
     Story story;
 
