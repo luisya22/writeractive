@@ -1,0 +1,7 @@
+.chapterBox{
+  @apply px-2 py-4 bg-white shadow;
+
+  h3{
+    @apply text-2xl text-black;
+  }
+}
