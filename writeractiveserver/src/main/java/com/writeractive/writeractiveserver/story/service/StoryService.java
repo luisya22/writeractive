@@ -10,7 +10,9 @@ import com.writeractive.writeractiveserver.useraccount.model.User;
 import com.writeractive.writeractiveserver.useraccount.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -55,5 +57,15 @@ public class StoryService {
         }
 
         return storyDtoMapper.convertToDto(storyDB.get());
+    }
+
+    public List<StoryDto> getByUserId(Long userId){
+
+        List<Story> stories = storyRepository.getStoriesByOwnerId(userId);
+
+        return stories
+                .stream()
+                .map(storyDtoMapper::convertToDto)
+                .toList();
     }
 }

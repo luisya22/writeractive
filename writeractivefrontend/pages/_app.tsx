@@ -1,13 +1,16 @@
 import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
 import EngineLayout from "../components/EngineLayout/EngineLayout";
+import {AuthProvider} from "../context/AuthContext";
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, router }: AppProps) {
   return (
       <>
-        <EngineLayout>
-          <Component {...pageProps} />
-        </EngineLayout>
+        <AuthProvider router={router}>
+            <EngineLayout>
+                <Component {...pageProps} />
+            </EngineLayout>
+        </AuthProvider>
       </>
   )
 }

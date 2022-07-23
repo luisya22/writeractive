@@ -33,8 +33,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
-        if(authorizationHeader == null && !authorizationHeader.startsWith("Bearer ")){
+        if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
+
+            return;
         }
 
         try{

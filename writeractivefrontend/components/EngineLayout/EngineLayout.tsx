@@ -12,11 +12,11 @@ export default function EngineLayout(props:{
                 <title>Writeractive Engine</title>
                 <meta name="description" content="A programming blog where you will learn how to build a webpage, how to grow your developer career and all the skills you need to be successful at your coding job."/>
             </Head>
-            <header className={'bg-main-dark-color shadow w-full mx-auto'}>
+            <header className={'bg-main-dark-color shadow w-full mx-auto sticky top-0 z-[100]'}>
                 <EngineNavbar/>
             </header>
 
-            <main className="container mx-auto lg:px-24 md:px-10 px-2 mb-4">
+            <main>
                 {props.children}
             </main>
         </div>

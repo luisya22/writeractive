@@ -1,127 +1,62 @@
-import {Chapter} from "../../types/types";
-import {useEffect, useState} from "react";
-import {DndContext} from "@dnd-kit/core";
-import ChapterBox from "../../components/StoryEngine/ChapterBox/ChapterBox";
+import {Chapter, Choice, Story} from "../../types/types";
+import React, {useEffect, useRef, useState} from "react";
+import {DndContext, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
+import ChapterBoxDraggable from "../../components/StoryEngine/ChapterBox/ChapterBoxDraggable";
 import dynamic from "next/dynamic";
-import { Xwrapper } from "react-xarrows";
-import ScrollContainer from "react-indiana-drag-scroll";
+import { refType, Xwrapper} from "react-xarrows";
 
-const Xarrow = dynamic(() => import('react-xarrows'), {
-    ssr: false
-});
+import {useDraggable} from "react-use-draggable-scroll";
+import ChapterEditor from "../../components/StoryEngine/ChapterEditor/ChapterEditor";
+import {getUserStories} from "../../http/storyService";
+import {useAuthentication} from "../../context/AuthContext";
 
-export default function EnginePage(){
 
-    const [chapters, setChapters] = useState<Array<Chapter>>([])
+const defaultChapter: Chapter = {
+    id: "",
+    content: "",
+    title: "",
+    isFinalChapter: false,
+    choices: [],
+    positionX: 0,
+    positionY: 0
+}
 
-    useEffect(() =>{
-        setChapters([
-            {
-                id: "1",
-                title: "Chapter One",
-                content: "This is the first chapter",
-                isFinalChapter: false,
-                choices: [
-                    {
-                        id: "1",
-                        name: "Choice",
-                        text: "text",
-                        parentChapter: "1",
-                        nextChapter: "2"
-                    }
-                ],
-                positionX: 100,
-                positionY: 150
-            },
-            {
-                id: "2",
-                title: "Chapter Two",
-                content: "This is the first chapter",
-                isFinalChapter: false,
-                choices: [
-                    {
-                        id: "1",
-                        name: "Choice",
-                        text: "text",
-                        parentChapter: "2",
-                        nextChapter: "4"
-                    }
-                ],
-                positionX: 1000,
-                positionY: 200
-            },
-            {
-                id: "3",
-                title: "Chapter Three",
-                content: "This is the first chapter",
-                isFinalChapter: false,
-                choices: [],
-                positionX: 1000,
-                positionY: 200
-            },
-            {
-                id: "4",
-                title: "Chapter Four",
-                content: "This is the first chapter",
-                isFinalChapter: false,
-                choices: [
-                    {
-                        id: "1",
-                        name: "Choice",
-                        text: "text",
-                        parentChapter: "1",
-                        nextChapter: "3"
-                    }
-                ],
-                positionX: 1000,
-                positionY: 200
-            },
-        ])
-    },[]);
+export default function EngineMainPage(props: any) {
 
-    function handleDragEnd(event:any){
-        console.log(event);
+    const [stories, setStories] = useState<Array<Story>>([]);
+    const {accessToken} = useAuthentication();
 
-        const chaptersTemp = chapters;
+    useEffect(() => {
+       const getStories = async () => {
+           const response = await getUserStories(accessToken);
 
-        const chapterIndex = chaptersTemp.findIndex(chapter => chapter.id == event.active.id);
+           setStories(response.data);
+       }
 
-        console.log(chapterIndex);
+       getStories().catch(console.error)
+    }, [accessToken])
 
-        chaptersTemp[chapterIndex].positionX += event.delta.x;
-        chaptersTemp[chapterIndex].positionY += event.delta.y;
-
-        setChapters([...chaptersTemp])
-    }
-
-    return(
+    return (
         <>
             <div>
-                <ScrollContainer>
-                    <Xwrapper>
-                        <DndContext
-                            onDragEnd={handleDragEnd}>
-                            {chapters.map((chapter) =>{
-                                return(
-                                    <div key={chapter.id}>
-                                        <ChapterBox chapter={chapter}>
-                                            <div>
-                                                <h3 className={'text-2xl'}>{chapter.title}</h3>
-                                            </div>
-                                        </ChapterBox>
-                                        {chapter.choices.map((choice) =>{
-                                            return(
-                                                <Xarrow start={choice.parentChapter} end={choice.nextChapter}/>
-                                            )
-                                        })}
-                                    </div>
-                                )
-                            })}
-
-                        </DndContext>
-                    </Xwrapper>
-                </ScrollContainer>
+                {stories.map(story =>(
+                    <>
+                        <h1>{story.title}</h1>
+                    </>
+                ))}
             </div>
         </>
     )
 }
+
+export function getServerSideProps(){
+
+    return {
+        props:{
+            data: [
+
+            ]
+        }
+    }
+}
+

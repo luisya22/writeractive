@@ -45,7 +45,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             LoginRequest authRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword());
             return  authenticationManager.authenticate(authenticationToken);
 
         } catch (IOException e) {
@@ -64,15 +64,17 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Cookie refreshTokenCookie = new Cookie("session", refreshToken.getToken());
 
         refreshTokenCookie.setMaxAge(8640000);
-        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setSecure(false);
         refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setDomain("");
+        refreshTokenCookie.setPath("");
 
         response.addCookie(refreshTokenCookie);
 
         Map<String, String> tokens = new HashMap<>();
 
-        tokens.put("access_token", accessToken);
-        tokens.put("refresh_token", refreshToken.getToken());
+        tokens.put("accessToken", accessToken);
+        tokens.put("refreshToken", refreshToken.getToken());
 
         response.setContentType(APPLICATION_JSON_VALUE);
 

@@ -1,16 +1,25 @@
 import {useDraggable} from "@dnd-kit/core";
 import {useXarrow} from "react-xarrows";
-import React, {useEffect} from "react";
+import React, {Dispatch, SetStateAction, useEffect} from "react";
 import styles from "./Chapter.module.scss";
 import {Chapter} from "../../../types/types";
 
 
-export default function ChapterBox(props: {chapter: Chapter, children: any}){
+export default function ChapterBoxDraggable(props: {
+    chapter: Chapter,
+    onChapterClick:  Function,
+    index: number
+}){
     const {attributes, listeners, setNodeRef, transform} = useDraggable({
         id: props.chapter.id
     });
 
     const updateXarrow = useXarrow();
+
+    const handleClick = () => {
+        console.log("Chapter clicked!");
+        props.onChapterClick(props.chapter, props.index);
+    }
 
 
 
@@ -27,7 +36,10 @@ export default function ChapterBox(props: {chapter: Chapter, children: any}){
 
     return(
         <button id={props.chapter.id} className={styles.chapterBox} ref={setNodeRef} style={positionStyle} {...listeners} {...attributes}>
-            {props.children}
+            <div>
+                <h3 onClick={handleClick} className={'text-2xl'}>{props.chapter.title}</h3>
+            </div>
         </button>
     )
 }
+

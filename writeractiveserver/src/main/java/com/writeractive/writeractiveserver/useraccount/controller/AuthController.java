@@ -3,6 +3,7 @@ package com.writeractive.writeractiveserver.useraccount.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.writeractive.writeractiveserver.config.security.LoginRequest;
+import com.writeractive.writeractiveserver.useraccount.dto.TokensDto;
 import com.writeractive.writeractiveserver.useraccount.dto.UserCreateDto;
 import com.writeractive.writeractiveserver.useraccount.model.SecurityUser;
 import com.writeractive.writeractiveserver.useraccount.repository.RoleRepository;
@@ -17,11 +18,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.HashMap;
@@ -64,40 +65,24 @@ public class AuthController {
         return ResponseEntity.ok("User created successfully");
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequest loginRequest){
-        Authentication authentication = authenticationManager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                loginRequest.getUsername(),
-                                loginRequest.getPassword()
-                        )
-                );
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<TokensDto> refreshToken(
+            @CookieValue(name="session") String refreshToken,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ){
 
-        SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-        String accessToken = JWT.create()
-                .withSubject(securityUser.getUser().getId().toString())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
-//                .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles", securityUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
-                .sign(algorithm);
+        TokensDto tokensDto = authService.refreshToken(refreshToken, request.getRequestURL().toString());
 
-        String refreshToken = JWT.create()
-                .withSubject(securityUser.getUser().getId().toString())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
-//                .withIssuer(request.getRequestURL().toString())
-                .sign(algorithm);
+        Cookie refreshTokenCookie = new Cookie("session", tokensDto.getRefreshToken());
+        refreshTokenCookie.setMaxAge(8640000);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setHttpOnly(true);
 
-        Map<String, String> tokens = new HashMap<>();
+        response.addCookie(refreshTokenCookie);
 
-        tokens.put("access_token", accessToken);
-        tokens.put("refresh_token", refreshToken);
-
-
-        return ResponseEntity.ok()
-                .header("access_token", tokens.get("access_token"))
-//                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .body(accessToken);
+        return ResponseEntity.ok(tokensDto);
     }
+
+
 }

@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/stories")
 public class StoryController {
@@ -20,9 +22,9 @@ public class StoryController {
     @PostMapping
     public ResponseEntity<StoryDto> save(@RequestBody StoryDto storyDto){
 
-        Long id = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        Long userId = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        StoryDto responseStory = storyService.save(id, storyDto);
+        StoryDto responseStory = storyService.save(userId, storyDto);
 
         return ResponseEntity.ok(responseStory);
     }
@@ -33,5 +35,14 @@ public class StoryController {
         StoryDto story = storyService.getBySlug(slug);
 
         return ResponseEntity.ok(story);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<StoryDto>> getLoggedInUserStories(){
+        Long userId = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        List<StoryDto> stories = storyService.getByUserId(userId);
+
+        return ResponseEntity.ok(stories);
     }
 }

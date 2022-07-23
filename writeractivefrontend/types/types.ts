@@ -15,3 +15,23 @@ export type Choice = {
     parentChapter: string,
     nextChapter: string,
 }
+
+export type Validator = {
+    validationFunctions: Array<ValidationFunction>
+}
+
+export type ValidationFunction = {
+    validate: (value: string, data: Map<string, any>) => Array<string>,
+}
+
+export type Story = {
+    id: string,
+    coverPage: string,
+    genre: string,
+    language: string,
+    published: boolean,
+    title: string,
+    author: any,
+    slug: string,
+    firstChapterId: string
+}

@@ -25,8 +25,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -51,11 +54,29 @@ public class SecurityConfig {
         http.apply(CustomDsl.customDsl(refreshTokenService));
 
         http.csrf().disable();
+
+        http.cors( c -> {
+            CorsConfigurationSource source = request -> {
+                CorsConfiguration config = new CorsConfiguration();
+
+                //TODO: Move to env variable
+                config.setAllowedOrigins(List.of("https://programmingbytes.io","https://testing.programmingbytes.io","http://localhost:3000"));
+                config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+                config.setAllowedHeaders(List.of("*"));
+                config.setAllowCredentials(true);
+
+                return config;
+            };
+
+            c.configurationSource(source);
+        });
+
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests()
                 .mvcMatchers(HttpMethod.POST, "/api/stories").authenticated()
                 .mvcMatchers("/api/readings/**").authenticated()
+                .mvcMatchers(HttpMethod.GET,"/api/stories/user").authenticated()
                 .anyRequest().permitAll();
 
 //        http.addFilter(new CustomAuthenticationFilter(authenticationManager));
