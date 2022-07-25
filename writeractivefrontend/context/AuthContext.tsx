@@ -30,6 +30,7 @@ export function AuthProvider(props: {children: any, router: any}): any{
 
     const [accessToken, setAccessToken] = useState<string>(defaultAuthenticationContextValues.accessToken);
     const [user, setUser] = useState<any>(defaultAuthenticationContextValues.user);
+    const [refreshingToken, setRefreshingToken] = useState<boolean>();
 
     const setAuthenticationToken = (authenticationToken: string) => {
         console.log("Set authentication", authenticationToken)
@@ -50,19 +51,19 @@ export function AuthProvider(props: {children: any, router: any}): any{
     // If path protected and not accessToken in redirect
     const pathIsProtected: boolean = protectedRoutes.indexOf(props.router.pathname) > -1;
 
-    console.log("Access Token", !accessToken, pathIsProtected);
 
-
+    //TODO: Fix double request with axios interceptor
     useEffect(() =>{
 
         const  validateLoggedIn = async () => {
-            console.log("AccessToken", accessToken)
-            if(!accessToken && pathIsProtected){
+            console.log("AccessToken Refreshing", accessToken)
+            if(!accessToken && pathIsProtected && !refreshingToken){
+                setRefreshingToken(true);
+                console.log("Refresh Login no token");
                 const response: any = await refreshToken();
 
-                console.log("Status Response", response.status);
-
                 if(response.status != 200){
+                    setRefreshingToken(false);
                     pushIfNotLogin()
                     return;
                 }
@@ -70,6 +71,7 @@ export function AuthProvider(props: {children: any, router: any}): any{
                 setAccessToken(response.data.accessToken);
 
                 if(response.data.accessToken != null && props.router.pathname == '/auth/login'){
+                    setRefreshingToken(false);
                     props.router.push('/engine');
                 }
             }
@@ -95,8 +97,10 @@ export function AuthProvider(props: {children: any, router: any}): any{
 
         const originalRequest = error.config;
 
-        if(error.response.status === 403 && !originalRequest._retry){
+        if(error.response.status === 403 && !originalRequest._retry && !refreshingToken){
             originalRequest._retry = true;
+
+            console.log("Refreshing Token interceptor", refreshingToken);
 
             const response: any = await refreshToken();
 
@@ -108,8 +112,6 @@ export function AuthProvider(props: {children: any, router: any}): any{
 
             originalRequest.headers['Authorization'] = 'Bearer ' + response.data.accessToken;
 
-            console.log(originalRequest, accessToken);
-
             return api(originalRequest);
         }
 
@@ -117,9 +119,18 @@ export function AuthProvider(props: {children: any, router: any}): any{
     })
 
 
+    const content = () => {
+        if(pathIsProtected && !accessToken){
+            return null;
+        }
+
+        return props.children
+    }
+
+
     return (
         <AuthenticationContext.Provider value={providerValue}>
-            {props.children}
+            {content()}
         </AuthenticationContext.Provider>
     )
 }
@@ -127,5 +138,7 @@ export function AuthProvider(props: {children: any, router: any}): any{
 const protectedRoutes = [
     "/engine",
     "/auth/login",
-    "/engine/new-story"
+    "/engine/new-story",
+    "/engine/stories/[id]/edit-story",
+    "/engine/stories/[id]/edit-chapters",
 ]

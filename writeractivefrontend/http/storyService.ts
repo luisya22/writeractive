@@ -9,6 +9,8 @@ export type StorySaveRequest = {
     language: string
 }
 
+//TODO: Move token to interceptor
+
 export const saveStory = async (story: StorySaveRequest,accessToken: string) =>{
     const options = {
         headers: {
@@ -29,4 +31,15 @@ export const getUserStories = async (accessToken: string) => {
     }
 
     return await api.get("/stories/user", options)
+}
+
+export const getStoryById = async (id: string, accessToken: string) => {
+
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+
+    return await api.get(`/stories/${id}/edit`);
 }

@@ -2,7 +2,7 @@ import Image from "next/image";
 import {FormValidationProvider} from "../../context/FormValidationContext";
 import InputField from "../InputField/InputField";
 import TextArea from "../TextArea/TextArea";
-import React, {Dispatch, FC, SetStateAction, useState} from "react";
+import React, {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
 import {saveStory, StorySaveRequest} from "../../http/storyService";
 import {useAuthentication} from "../../context/AuthContext";
 import {useRouter} from "next/router";
@@ -35,6 +35,14 @@ const StoryForm: FC<StoryFormProps> = (
 
     const {accessToken} = useAuthentication();
     const router = useRouter();
+
+    useEffect(() => {
+        setTitle(storyTitle);
+        setDescription(storyDescription);
+        setCoverPage(storyCoverPage);
+        setGenre(storyGenre);
+        setLanguage(storyLanguage);
+    }, [storyTitle, storyDescription, storyCoverPage, storyGenre, storyLanguage, storyId])
 
     const handleStoryCreate = async () => {
         const data: StorySaveRequest = {

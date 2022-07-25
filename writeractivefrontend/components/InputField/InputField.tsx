@@ -15,6 +15,7 @@ export default function InputField(props: any){
             name: props.name,
             validators: props.validators
         })
+
     }, []);
 
     const onInputBlur = (e: any) => {

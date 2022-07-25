@@ -83,13 +83,17 @@ export function FormValidationProvider({children, id, onSubmit}){
             const {data} = formState;
             const value = formState.data.get(name);
 
+            let messages: Array<string> = [];
 
-            const messages: Array<string> = validator.reduce((result: Array<string>, validationFunction:  (value: string, data: Map<string, any>) => Array<string>) =>{
-                const err: Array<string> = validationFunction(value, data);
-                return [...result, ...err]
-            }, []);
+            if(value.id == id){
+                messages = validator.reduce((result: Array<string>, validationFunction:  (value: string, data: Map<string, any>) => Array<string>) =>{
 
-
+                   console.log("Inside", value);
+                    const err: Array<string> = validationFunction(value.value, data);
+                    console.log(err);
+                    return [...result, ...err]
+                }, []);
+            }
 
             if(messages.length > 0){
                 formErrors.set(name, messages)
@@ -109,7 +113,7 @@ export function FormValidationProvider({children, id, onSubmit}){
     const setFieldValue = (name, value) => {
 
         const state = formState;
-        state.data.set(name, value);
+        state.data.set(name, {id, value});
         state.errors.set(name, []);
 
         setFormState(state);

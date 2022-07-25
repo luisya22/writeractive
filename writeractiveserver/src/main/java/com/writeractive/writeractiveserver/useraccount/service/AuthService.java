@@ -54,7 +54,6 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    @Transactional
     public TokensDto refreshToken(String refreshTokenString, String url){
 
         RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenString);

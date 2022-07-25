@@ -11,7 +11,9 @@ import com.writeractive.writeractiveserver.useraccount.repository.UserRepository
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -67,5 +69,20 @@ public class StoryService {
                 .stream()
                 .map(storyDtoMapper::convertToDto)
                 .toList();
+    }
+
+    public StoryDto getById(UUID id, Long userId){
+
+        Optional<Story> story = storyRepository.findById(id);
+
+        if(story.isEmpty()){
+            throw new StoryNotFoundException("Story not found with id - " + id);
+        }
+
+        if(!Objects.equals(story.get().getOwner().getId(), userId)){
+            throw new StoryNotFoundException("User is not the owner"); //TODO: Create new exception
+        }
+
+        return storyDtoMapper.convertToDto(story.get());
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/stories")
@@ -44,5 +45,14 @@ public class StoryController {
         List<StoryDto> stories = storyService.getByUserId(userId);
 
         return ResponseEntity.ok(stories);
+    }
+
+    @GetMapping("/{id}/edit")
+    public ResponseEntity<StoryDto> getStoryById(@PathVariable UUID id){
+        Long userId = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        StoryDto story = storyService.getById(id, userId);
+
+        return ResponseEntity.ok(story);
     }
 }

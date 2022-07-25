@@ -64,7 +64,10 @@ public class RefreshTokenService {
     }
 
     public int deleteById(Long id){
-        refreshTokenRepository.deleteById(id);
+
+        if(refreshTokenRepository.existsById(id)){
+//            refreshTokenRepository.deleteById(id); //TODO: Frontend double request error check
+        }
 
         return 1;
     }

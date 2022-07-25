@@ -25,7 +25,7 @@ export type ValidationFunction = {
 }
 
 export type Story = {
-    id: string,
+    id: string | null,
     coverPage: string,
     genre: string,
     language: string,
@@ -33,5 +33,6 @@ export type Story = {
     title: string,
     author: any,
     slug: string,
-    firstChapterId: string
+    firstChapterId: string,
+    description: string
 }
