@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useFormValidation} from "../../context/FormValidationContext";
 
 
-export default function InputField(props){
+export default function InputField(props: any){
 
     const [inputData, setInputData] = useState(props.data);
     const {errors, data, setFieldValue, registerInput} = useFormValidation();
@@ -17,7 +17,7 @@ export default function InputField(props){
         })
     }, []);
 
-    const onInputBlur = (e) => {
+    const onInputBlur = (e: any) => {
         props.setData(e.target.value);
         setFieldValue(props.name, e.target.value);
 
@@ -26,7 +26,7 @@ export default function InputField(props){
         }
     }
 
-    const onInputChange = (e) => {
+    const onInputChange = (e: any) => {
         setInputData(e.target.value);
         setFieldValue(props.name, e.target.value);
     }
@@ -42,7 +42,7 @@ export default function InputField(props){
             return null;
         }
 
-        const errors = [];
+        const errors: any = [];
 
         inputErrors.forEach((error, i) => {
             errors.push(

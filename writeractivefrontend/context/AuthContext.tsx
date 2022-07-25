@@ -3,6 +3,7 @@ import {createContext, useContext, useEffect, useState} from "react";
 import {refreshToken} from "../http/authService";
 import {router} from "next/client";
 import api from "../http/axiosConfig";
+import axios from "axios";
 
 type authenticationContextType = {
     accessToken: string,
@@ -99,9 +100,15 @@ export function AuthProvider(props: {children: any, router: any}): any{
 
             const response: any = await refreshToken();
 
+            if(response.status != 200){
+                await props.router.push("/auth/login")
+            }
+
             setAccessToken(response.data.accessToken);
 
-            api.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.accessToken;
+            originalRequest.headers['Authorization'] = 'Bearer ' + response.data.accessToken;
+
+            console.log(originalRequest, accessToken);
 
             return api(originalRequest);
         }
