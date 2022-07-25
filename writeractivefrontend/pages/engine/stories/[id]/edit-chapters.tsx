@@ -189,6 +189,10 @@ export default function EnginePage(props: any){
         return {positionX, positionY}
     }
 
+    const cancelSelectedChapter = () => {
+        setSelectedChapter(defaultChapter);
+    }
+
     return(
         <>
             <div className={'bg-main-dark-color shadow w-full mx-auto sticky top-0'}>
@@ -247,11 +251,10 @@ export default function EnginePage(props: any){
                         </DndContext>
                     </Xwrapper>
                 {selectedChapter.id != '' || selectedChapter.id == null ? (
-                    <ChapterEditor chapter={selectedChapter} editChapter={handleEditChapter} chapters={chapters} addChoice={handleAddChoice}/>
+                    <ChapterEditor chapter={selectedChapter} editChapter={handleEditChapter} chapters={chapters} addChoice={handleAddChoice} cancelSelectedChapter={cancelSelectedChapter}/>
                 ): null
 
                 }
-                {selectedChapter.id}
             </div>
         </>
     )

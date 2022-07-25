@@ -1,5 +1,5 @@
 .chapterBox{
-  @apply px-2 py-4 bg-white shadow;
+  @apply px-2 py-4 bg-white shadow rounded min-w-fit;
 
   h3{
     @apply text-2xl text-black;
