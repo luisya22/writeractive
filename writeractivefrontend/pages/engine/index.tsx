@@ -65,12 +65,12 @@ export default function EngineMainPage(props: any) {
                                     <h3 className={'text-xl font-bold'}>{story.title}</h3>
                                 </div>
                                 <div className={'w-2/3 flex justify-end space-x-2 items-start'}>
-                                    <div>
+                                    <Link passHref href={`/engine/stories/${story.id}/edit-story`}>
                                         <button className={'btn btn-primary'}>Edit Story Info</button>
-                                    </div>
-                                    <div>
+                                    </Link>
+                                    <Link passHref href={`/engine/stories/${story.id}/edit-chapters`}>
                                         <button className={'btn btn-secondary'}>Manage Chapters</button>
-                                    </div>
+                                    </Link>
                                 </div>
                             </div>
                             <hr className={'my-4'}/>
