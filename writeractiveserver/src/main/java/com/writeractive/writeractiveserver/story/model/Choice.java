@@ -1,5 +1,6 @@
 package com.writeractive.writeractiveserver.story.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.writeractive.writeractiveserver.util.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,10 +29,12 @@ public class Choice extends BaseEntity {
     private String name;
     private String text;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_chapter_id", columnDefinition = "binary(16)")
     private Chapter parentChapter;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "next_chapter_id", columnDefinition = "binary(16)")
     private Chapter nextChapter;

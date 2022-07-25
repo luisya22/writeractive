@@ -33,16 +33,24 @@ public class ChoiceService {
             throw new ChapterNotFoundException("Chapter not found with id: " + parentChapterId);
         }
 
-        Optional<Chapter> nextChapter = chapterRepository.findById(choiceDto.getNextChapterId());
-
-        if(nextChapter.isEmpty()){
-            throw new ChapterNotFoundException("Selected Next Chapter not found - id: " + choiceDto.getNextChapterId());
-        }
+        Optional<Chapter> nextChapter;
 
         Choice choice = choiceDtoMapper.convertToEntity(choiceDto);
 
         choice.setParentChapter(parentChapter.get());
-        choice.setNextChapter(nextChapter.get());
+
+        if(choiceDto.getNextChapterId() != null){
+            nextChapter = chapterRepository.findById(choiceDto.getNextChapterId());
+
+            if(nextChapter.isEmpty()){
+                throw new ChapterNotFoundException("Selected Next Chapter not found - id: " + choiceDto.getNextChapterId());
+            }
+
+            choice.setNextChapter(nextChapter.get());
+        }
+
+
+
 
         Choice choiceDB = choiceRepository.save(choice);
 

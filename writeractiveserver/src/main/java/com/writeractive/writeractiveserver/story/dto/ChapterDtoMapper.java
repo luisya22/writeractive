@@ -1,28 +1,33 @@
 package com.writeractive.writeractiveserver.story.dto;
 
 import com.writeractive.writeractiveserver.story.model.Chapter;
-import com.writeractive.writeractiveserver.story.model.Story;
-import com.writeractive.writeractiveserver.story.repository.StoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.util.List;
 
 @Component
 public class ChapterDtoMapper {
 
     ModelMapper modelMapper = new ModelMapper();
-    private final StoryRepository storyRepository;
+    private final ChoiceDtoMapper choiceDtoMapper;
 
-    public ChapterDtoMapper(StoryRepository storyRepository) {
-        this.storyRepository = storyRepository;
+    public ChapterDtoMapper(ChoiceDtoMapper choiceDtoMapper) {
+        this.choiceDtoMapper = choiceDtoMapper;
     }
+
 
     public ChapterDto convertToDto(Chapter chapter){
 
         ChapterDto chapterDto = modelMapper.map(chapter, ChapterDto.class);
 
         chapterDto.setStoryId(chapter.getStory().getId());
+
+        List<ChoiceDto> choices = chapter.getChoices()
+                .stream()
+                .map(choiceDtoMapper::convertToDto)
+                .toList();
+        chapterDto.setChoices(choices);
 
         return chapterDto;
     }
