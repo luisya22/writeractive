@@ -1,19 +1,19 @@
 export type Chapter = {
-    id: string,
+    id: string | null,
     content: string,
     title: string,
     isFinalChapter: boolean,
-    choices: Array<Choice>
+    choices: Array<Choice>,
     positionX: number,
     positionY: number
 }
 
 export type Choice = {
-    id: string,
-    name: string,
-    text: string,
-    parentChapter: string,
-    nextChapter: string,
+    id: string | null,
+    name: string | null,
+    text: string | null,
+    parentChapterId: string | null,
+    nextChapterId: string | null,
 }
 
 export type Validator = {

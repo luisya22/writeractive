@@ -33,7 +33,6 @@ export function AuthProvider(props: {children: any, router: any}): any{
     const [refreshingToken, setRefreshingToken] = useState<boolean>();
 
     const setAuthenticationToken = (authenticationToken: string) => {
-        console.log("Set authentication", authenticationToken)
         setAccessToken(authenticationToken);
     }
 
@@ -56,10 +55,8 @@ export function AuthProvider(props: {children: any, router: any}): any{
     useEffect(() =>{
 
         const  validateLoggedIn = async () => {
-            console.log("AccessToken Refreshing", accessToken)
             if(!accessToken && pathIsProtected && !refreshingToken){
                 setRefreshingToken(true);
-                console.log("Refresh Login no token");
                 const response: any = await refreshToken();
 
                 if(response.status != 200){
@@ -100,7 +97,6 @@ export function AuthProvider(props: {children: any, router: any}): any{
         if(error.response.status === 403 && !originalRequest._retry && !refreshingToken){
             originalRequest._retry = true;
 
-            console.log("Refreshing Token interceptor", refreshingToken);
 
             const response: any = await refreshToken();
 

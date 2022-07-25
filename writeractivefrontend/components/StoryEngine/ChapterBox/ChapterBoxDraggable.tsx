@@ -8,16 +8,16 @@ import {Chapter} from "../../../types/types";
 export default function ChapterBoxDraggable(props: {
     chapter: Chapter,
     onChapterClick:  Function,
-    index: number
+    index: number,
+    selected: boolean
 }){
     const {attributes, listeners, setNodeRef, transform} = useDraggable({
-        id: props.chapter.id
+        id: props.chapter.id??""
     });
 
     const updateXarrow = useXarrow();
 
     const handleClick = () => {
-        console.log("Chapter clicked!");
         props.onChapterClick(props.chapter, props.index);
     }
 
@@ -34,8 +34,10 @@ export default function ChapterBoxDraggable(props: {
         updateXarrow()
     },[transform, props.chapter.positionY, props.chapter.positionX]);
 
+    const selectedClass = props.selected ? "border-2 border-main-color" : "";
+
     return(
-        <button id={props.chapter.id} className={styles.chapterBox} ref={setNodeRef} style={positionStyle} {...listeners} {...attributes}>
+        <button id={props.chapter.id??""} className={[styles.chapterBox, selectedClass].join(" ")} ref={setNodeRef} style={positionStyle} {...listeners} {...attributes}>
             <div>
                 <h3 onClick={handleClick} className={'text-2xl'}>{props.chapter.title}</h3>
             </div>

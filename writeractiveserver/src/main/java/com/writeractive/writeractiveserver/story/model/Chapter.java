@@ -30,6 +30,12 @@ public class Chapter extends BaseEntity {
     private String content;
     private String title;
 
+    @Column(columnDefinition = "int default 1")
+    private Integer positionX;
+
+    @Column(columnDefinition = "int default 1")
+    private Integer positionY;
+
     @Column(columnDefinition = "tinyint(1) default 0")
     private boolean isFinalChapter;
 
@@ -41,6 +47,6 @@ public class Chapter extends BaseEntity {
     @JoinColumn(columnDefinition = "binary(16)")
     Story story;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "parentChapter")
     List<Choice> choices = new ArrayList<>();
 }

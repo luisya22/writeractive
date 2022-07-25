@@ -109,6 +109,7 @@ const StoryForm: FC<StoryFormProps> = (
                                             setData={setDescription}
                                             validators={[]}
                                             name={'description'}
+                                            rows={6}
                                         />
                                     </div>
                                     <div className={'form-group'}>

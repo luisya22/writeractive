@@ -26,11 +26,9 @@ export default function StoryCreationForm(props: any){
         const getStory = async () => {
             const response = await getStoryById(props.storyId, accessToken);
 
-            if(response.status){
+            if(response.status == 200){
                 setStory(response.data);
             }
-
-            console.log(response.data)
 
         }
 

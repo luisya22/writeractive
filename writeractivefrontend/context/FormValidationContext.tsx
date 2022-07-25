@@ -88,9 +88,7 @@ export function FormValidationProvider({children, id, onSubmit}){
             if(value.id == id){
                 messages = validator.reduce((result: Array<string>, validationFunction:  (value: string, data: Map<string, any>) => Array<string>) =>{
 
-                   console.log("Inside", value);
                     const err: Array<string> = validationFunction(value.value, data);
-                    console.log(err);
                     return [...result, ...err]
                 }, []);
             }
@@ -101,7 +99,6 @@ export function FormValidationProvider({children, id, onSubmit}){
         });
 
 
-        console.log(formErrors);
         if(formErrors.size == 0){
             return true;
         }
@@ -161,7 +158,7 @@ export function FormValidationProvider({children, id, onSubmit}){
             <form
                 onSubmit={submit}
                 id={id}
-                className={'w-full'}
+                className={'w-full h-full'}
             >
                 {children}
             </form>

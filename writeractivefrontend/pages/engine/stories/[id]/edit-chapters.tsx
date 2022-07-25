@@ -7,6 +7,8 @@ import { Xwrapper } from "react-xarrows";
 
 import {useDraggable} from "react-use-draggable-scroll";
 import ChapterEditor from "../../../../components/StoryEngine/ChapterEditor/ChapterEditor";
+import {ChapterUpdateRequest, getChaptersByStory, saveChapter, updateChapter} from "../../../../http/storyService";
+import {useAuthentication} from "../../../../context/AuthContext";
 
 const Xarrow = dynamic(() => import('react-xarrows'), {
     ssr: false
@@ -22,7 +24,11 @@ const defaultChapter: Chapter = {
     positionY: 0
 }
 
+//TODO: Separate on multiple components and use Context API to avoid prop drilling
+
 export default function EnginePage(props: any){
+
+    const {accessToken} = useAuthentication();
 
     const mouseSensor = useSensor(MouseSensor, {
         activationConstraint: {
@@ -44,12 +50,21 @@ export default function EnginePage(props: any){
     const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(-1)
 
     useEffect(() =>{
-        console.log("Data", props)
+
+        const getChapters = async () => {
+            const response = await getChaptersByStory(props.storyId, accessToken);
+
+            if(response.status == 200){
+                setChapters(response.data);
+            }
+        }
+
+        getChapters().catch(console.error)
+
         setChapters(props.data)
     },[]);
 
-    const handleDragEnd = (event:any) => {
-        console.log(event);
+    const handleDragEnd = async (event:any) => {
 
         const chaptersTemp = chapters;
 
@@ -59,15 +74,59 @@ export default function EnginePage(props: any){
         chaptersTemp[chapterIndex].positionY += event.delta.y;
 
         setChapters([...chaptersTemp]);
+
+        const chapter = chapters[chapterIndex];
+
+        const data: ChapterUpdateRequest = {
+            id: chaptersTemp[chapterIndex].id,
+            title: chaptersTemp[chapterIndex].title,
+            content: chaptersTemp[chapterIndex].content,
+            positionX: chaptersTemp[chapterIndex].positionX,
+            positionY: chaptersTemp[chapterIndex].positionY
+        }
+
+        const chapterResponse = await updateChapter(props.storyId, data, accessToken);
     }
     
-    const handleEditChapter = (chapter: Chapter, index: number) =>{
+    const handleEditChapter = async (chapter: Chapter, index: number) =>{
 
-        console.log("Reached Main");
+
+        const data: ChapterUpdateRequest = {
+            id: chapter.id,
+            title: chapter.title,
+            content: chapter.content,
+            positionX: null,
+            positionY: null
+        }
+
+        const chapterResponse = await updateChapter(props.storyId, data, accessToken);
+
+        if(chapterResponse.status != 200){
+            return;
+        }
         
         const chaptersTemp = chapters;
         
-        chaptersTemp[index] = chapter;
+        chaptersTemp[selectedChapterIndex] = chapter;
+
+        setChapters([...chaptersTemp]);
+    }
+
+    const handleAddChoice = async (chapterId: string, choice: Choice, choiceIndex: number | null = null) => {
+
+
+        console.log("Saved Choice", choice);
+        const chaptersTemp = chapters;
+
+        if(choiceIndex == null){
+            choiceIndex = chaptersTemp[selectedChapterIndex].choices.map(c => c.id).indexOf(choice.id);
+        }
+
+        if(choiceIndex <= -1){
+            chaptersTemp[selectedChapterIndex].choices.push(choice);
+        }else{
+            chaptersTemp[selectedChapterIndex].choices[choiceIndex] = choice;
+        }
 
         setChapters([...chaptersTemp]);
     }
@@ -77,9 +136,83 @@ export default function EnginePage(props: any){
         setSelectedChapterIndex(index)
     }
 
+    const handleNewChapter = async () =>{
+
+        const {positionX, positionY} = getChapterSpawnPosition();
+
+        const data: Chapter = {
+            id: null,
+            content: "",
+            title: "New Chapter",
+            isFinalChapter: false,
+            choices: [],
+            positionX: positionX,
+            positionY: positionY
+        }
+
+        const chapterResponse = await saveChapter(props.storyId, data, accessToken);
+
+        if(chapterResponse.status != 200){
+            return; //TODO: Alert
+        }
+
+        const chapter = chapterResponse.data;
+        const chaptersTemp = chapters;
+
+        chaptersTemp.push(chapter);
+
+        setChapters([...chaptersTemp]);
+    }
+
+    const getChapterSpawnPosition = () => {
+        let positionX = 100;
+        let positionY = 100;
+
+        if(selectedChapter){
+
+            const chapterIds: Array<string> = selectedChapter.choices.map(choice => choice.nextChapterId??"");
+
+            const positionsX: Array<number> = [];
+            const positionsY: Array<number> = [];
+
+            chapters.forEach( chapter => {
+                if(chapterIds.includes(chapter.id??"")){
+                    positionsX.push(chapter.positionX);
+                    positionsY.push(chapter.positionY);
+                }
+            });
+
+            positionX = (positionsX.reduce((sum, position) => sum + position, 0) / positionsX.length) + 20;
+            positionY = (positionsY.reduce((sum, position) => sum + position, 0) / positionsY.length) + 20;
+         }
+
+        return {positionX, positionY}
+    }
 
     return(
         <>
+            <div className={'bg-main-dark-color shadow w-full mx-auto sticky top-0'}>
+                <nav className={'border-t border-light flex justify-start space-x-2 items-center flex-wrap mx-auto px-4 '}>
+                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
+                        <button
+                            onClick={handleNewChapter}
+                            className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/plus.png'} alt={'plusIcon'}
+                        />New</button>
+                    </div>
+                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
+                        <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/edit.png'} alt={'plusIcon'}
+                        />Edit</button>
+                    </div>
+                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
+                        <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}
+                        />Test</button>
+                    </div>
+                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
+                        <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}
+                        />Chapters {chapters?.length}</button>
+                    </div>
+                </nav>
+            </div>
             <div>
                 <Xwrapper>
                         <DndContext
@@ -92,13 +225,18 @@ export default function EnginePage(props: any){
                                            <div key={chapter.id}>
                                                <ChapterBoxDraggable
                                                    chapter={chapter}
+                                                   selected={chapter.id == selectedChapter.id}
                                                    onChapterClick={handleSetSelectedChapter}
                                                    index={index}
                                                />
 
                                                {chapter.choices.map((choice, index) =>{
                                                    return(
-                                                       <Xarrow key={choice.id + '-' + index} start={choice.parentChapter} end={choice.nextChapter}/>
+                                                       <>
+                                                           {choice.nextChapterId != null ? (
+                                                               <Xarrow key={choice.id + '-' + index} start={choice.parentChapterId??""} end={choice.nextChapterId??""}/>
+                                                           ):null}
+                                                       </>
                                                    )
                                                })}
 
@@ -108,79 +246,20 @@ export default function EnginePage(props: any){
                            </div>
                         </DndContext>
                     </Xwrapper>
-                <ChapterEditor chapter={selectedChapter} editChapter={handleEditChapter}/>
+                {selectedChapter.id != '' || selectedChapter.id == null ? (
+                    <ChapterEditor chapter={selectedChapter} editChapter={handleEditChapter} chapters={chapters} addChoice={handleAddChoice}/>
+                ): null
+
+                }
+                {selectedChapter.id}
             </div>
         </>
     )
 }
 
-export function getServerSideProps(){
+export function getServerSideProps(props: {params:any}){
 
     return {
-        props:{
-            data: [
-                {
-                    id: "1",
-                    title: "Chapter One",
-                    content: "This is the first chapter",
-                    isFinalChapter: false,
-                    choices: [
-                        {
-                            id: "1",
-                            name: "Choice",
-                            text: "text",
-                            parentChapter: "1",
-                            nextChapter: "2"
-                        }
-                    ],
-                    positionX: 100,
-                    positionY: 150
-                },
-                {
-                    id: "2",
-                    title: "Chapter Two",
-                    content: "This is the second chapter",
-                    isFinalChapter: false,
-                    choices: [
-                        {
-                            id: "1",
-                            name: "Choice",
-                            text: "text",
-                            parentChapter: "2",
-                            nextChapter: "4"
-                        }
-                    ],
-                    positionX: 1000,
-                    positionY: 200
-                },
-                {
-                    id: "3",
-                    title: "Chapter Three",
-                    content: "This is the third chapter",
-                    isFinalChapter: false,
-                    choices: [],
-                    positionX: 1000,
-                    positionY: 200
-                },
-                {
-                    id: "4",
-                    title: "Chapter Four",
-                    content: "This is the fourth chapter",
-                    isFinalChapter: false,
-                    choices: [
-                        {
-                            id: "1",
-                            name: "Choice",
-                            text: "text",
-                            parentChapter: "1",
-                            nextChapter: "3"
-                        }
-                    ],
-                    positionX: 1000,
-                    positionY: 200
-                },
-            ]
-        }
+        props: {storyId: props.params.id}
     }
 }
-

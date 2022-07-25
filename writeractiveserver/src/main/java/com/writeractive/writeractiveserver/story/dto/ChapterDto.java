@@ -18,5 +18,7 @@ public class ChapterDto {
     private boolean isFinalChapter;
     private boolean published;
     private UUID storyId;
-    private List<Choice> choices;
+    private Integer positionX;
+    private Integer positionY;
+    private List<ChoiceDto> choices;
 }

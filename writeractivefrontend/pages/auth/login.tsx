@@ -21,18 +21,14 @@ export default function LonginForm(props: any){
             password
         }
 
-        console.log("Hellast");
 
         const loginResponse = await login(data);
 
-        console.log("Going there", loginResponse.data)
 
         if(loginResponse.status == 200){
             await setAuthenticationToken(loginResponse.data.accessToken);
             await router.push('/engine') //TODO: move to stories first
         }
-
-        console.log(loginResponse.data.access_token);
     }
 
     const requiredValidator = (val: string | number) => {

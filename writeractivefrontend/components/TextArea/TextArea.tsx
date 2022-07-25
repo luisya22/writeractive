@@ -59,7 +59,7 @@ export default function TextArea(props:  any){
         <>
             <label className={styles.label}>{props.label}</label>
             <textarea value={inputData} onChange={onInputChange} onBlur={onInputBlur}
-                   className={!inputErrors || inputErrors.length == 0 ? styles.textArea : styles.errorTextArea} rows={6}
+                   className={!inputErrors || inputErrors.length == 0 ? styles.textArea : styles.errorTextArea} rows={props.rows}
                    placeholder={props.placeholder}/>
             {renderErrors()}
         </>

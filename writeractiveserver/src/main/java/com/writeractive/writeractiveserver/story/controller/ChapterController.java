@@ -3,7 +3,6 @@ package com.writeractive.writeractiveserver.story.controller;
 import com.writeractive.writeractiveserver.story.dto.ChapterDto;
 import com.writeractive.writeractiveserver.story.service.ChapterService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,5 +31,13 @@ public class ChapterController {
         List<ChapterDto> chapters = chapterService.getAllByStoryId(storyId);
 
         return ResponseEntity.ok(chapters);
+    }
+
+    @PatchMapping("/{chapterId}")
+    public ResponseEntity<ChapterDto> update(@PathVariable UUID storyId, @PathVariable UUID chapterId, @RequestBody ChapterDto chapterDto){
+
+        ChapterDto responseChapter = chapterService.update(storyId, chapterId, chapterDto);
+
+        return ResponseEntity.ok(responseChapter);
     }
 }

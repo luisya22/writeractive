@@ -2,6 +2,6 @@
   @apply fixed h-2/3 right-20 top-1/4  w-1/3 inline-block align-middle z-[99];
 
   .editor{
-    @apply w-full h-full bg-white rounded-2xl px-6 py-4 shadow;
+    @apply w-full h-full bg-white rounded-2xl px-6 py-4 shadow overflow-auto;
   }
 }

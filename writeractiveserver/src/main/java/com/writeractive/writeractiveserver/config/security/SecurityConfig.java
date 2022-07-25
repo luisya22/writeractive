@@ -78,6 +78,9 @@ public class SecurityConfig {
                 .mvcMatchers("/api/readings/**").authenticated()
                 .mvcMatchers(HttpMethod.GET,"/api/stories/user").authenticated()
                 .mvcMatchers(HttpMethod.GET, "/api/stories/{id}/edit").authenticated()
+                .mvcMatchers("/api/stories/{id}/chapters/*").authenticated()
+                .mvcMatchers("/api/stories/{id}/chapters").authenticated()
+                .mvcMatchers("/api/chapters/*").authenticated()
                 .anyRequest().permitAll();
 
 //        http.addFilter(new CustomAuthenticationFilter(authenticationManager));
