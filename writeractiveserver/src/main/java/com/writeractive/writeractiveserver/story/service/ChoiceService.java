@@ -3,6 +3,7 @@ package com.writeractive.writeractiveserver.story.service;
 import com.writeractive.writeractiveserver.story.dto.ChoiceDto;
 import com.writeractive.writeractiveserver.story.dto.ChoiceDtoMapper;
 import com.writeractive.writeractiveserver.story.exception.ChapterNotFoundException;
+import com.writeractive.writeractiveserver.story.exception.ChoiceNotFoundException;
 import com.writeractive.writeractiveserver.story.model.Chapter;
 import com.writeractive.writeractiveserver.story.model.Choice;
 import com.writeractive.writeractiveserver.story.repository.ChapterRepository;
@@ -55,5 +56,17 @@ public class ChoiceService {
         Choice choiceDB = choiceRepository.save(choice);
 
         return choiceDtoMapper.convertToDto(choiceDB);
+    }
+
+    public int deleteChoiceById(UUID choiceId){
+        Optional<Choice> choice = choiceRepository.findById(choiceId);
+
+        if(choice.isEmpty()){
+            throw new ChoiceNotFoundException("Choice not found with id - " + choiceId);
+        }
+
+        choiceRepository.deleteById(choiceId);
+
+        return 1;
     }
 }

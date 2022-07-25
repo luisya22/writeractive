@@ -13,7 +13,9 @@ export default function ChapterEditor(props:{
     editChapter: Function,
     chapters: Array<Chapter>,
     addChoice: Function,
-    cancelSelectedChapter: Function
+    cancelSelectedChapter: Function,
+    deleteChoice: Function,
+    deleteChapter: Function
 }){
 
     const [selectedMenu, setSelectedMenu] = useState<string>("chapterTextMenu");
@@ -44,7 +46,6 @@ export default function ChapterEditor(props:{
     },[props.chapter.title]);
 
     useEffect(() => {
-        console.log("Saving...");
         if(title != null && title != ""){
             handleSave();
         }
@@ -66,6 +67,10 @@ export default function ChapterEditor(props:{
 
 
         props.addChoice(props.chapter.id, choice);
+    }
+
+    const deleteChoice = (choiceIndex: number) => {
+        props.deleteChoice(choiceIndex)
     }
 
 
@@ -108,7 +113,7 @@ export default function ChapterEditor(props:{
                         <div>
                             {props.chapter.choices.map((choice, index) => (
                                 <>
-                                    <ChoiceForm chapterId={props.chapter.id} choice={choice} chapters={props.chapters} key={index} index={index} addChoice={handleChoiceAdd}/>
+                                    <ChoiceForm chapterId={props.chapter.id} choice={choice} chapters={props.chapters} key={index} index={index} addChoice={handleChoiceAdd} deleteChoice={deleteChoice}/>
                                     <hr className={'my-2'}/>
                                 </>
                             ))}
@@ -154,6 +159,7 @@ export default function ChapterEditor(props:{
                     <div className="flex justify-start space-x-4">
                         <p className={['border-2 border-gray-600 cursor-pointer p-2 hover:bg-gray-400 hover:opacity-75', selectedMenu == "chapterTextMenu" ? " bg-gray-200": ""].join(' ')} onClick={() => setSelectedMenu("chapterTextMenu")}>Chapter Text</p>
                         <p className={['border-2 border-gray-600 cursor-pointer p-2 hover:bg-gray-400 hover:opacity-75', selectedMenu == "choicesMenu" ? " bg-gray-200": ""].join(' ')} onClick={() => setSelectedMenu('choicesMenu')}>Chapter Choices</p>
+                        <p className={'text-white border-2 border-gray-600 cursor-pointer p-2 bg-red-600 hover:bg-red-400 hover:opacity-75'} onClick={() => props.deleteChapter()}>Delete</p>
                     </div>
                     <div>
                         <p className={' cursor-pointer p-2 hover:bg-gray-400 hover:opacity-75'} onClick={() => props.cancelSelectedChapter()}>Close</p>

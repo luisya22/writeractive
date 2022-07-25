@@ -7,7 +7,13 @@ import { Xwrapper } from "react-xarrows";
 
 import {useDraggable} from "react-use-draggable-scroll";
 import ChapterEditor from "../../../../components/StoryEngine/ChapterEditor/ChapterEditor";
-import {ChapterUpdateRequest, getChaptersByStory, saveChapter, updateChapter} from "../../../../http/storyService";
+import {
+    ChapterUpdateRequest, deleteChapter,
+    deleteChoice,
+    getChaptersByStory,
+    saveChapter,
+    updateChapter
+} from "../../../../http/storyService";
 import {useAuthentication} from "../../../../context/AuthContext";
 
 const Xarrow = dynamic(() => import('react-xarrows'), {
@@ -90,6 +96,10 @@ export default function EnginePage(props: any){
     
     const handleEditChapter = async (chapter: Chapter, index: number) =>{
 
+        if(selectedChapterIndex !> -1){
+            return;
+        }
+
 
         const data: ChapterUpdateRequest = {
             id: chapter.id,
@@ -115,7 +125,6 @@ export default function EnginePage(props: any){
     const handleAddChoice = async (chapterId: string, choice: Choice, choiceIndex: number | null = null) => {
 
 
-        console.log("Saved Choice", choice);
         const chaptersTemp = chapters;
 
         if(choiceIndex == null){
@@ -193,6 +202,50 @@ export default function EnginePage(props: any){
         setSelectedChapter(defaultChapter);
     }
 
+    const handleChoiceDelete = async (choiceIndex: number) => {
+        const chapter = selectedChapter;
+
+        const choice = chapter.choices[choiceIndex];
+
+
+        const choiceResponse = await deleteChoice(chapter.id, choice.id, accessToken);
+
+
+        if(choiceResponse.status != 200){
+            return; //TODO: Alert
+        }
+
+        chapter.choices.splice(choiceIndex);
+
+        const chapterIndex = chapters.findIndex(c => c.id == chapter.id);
+
+        if(choiceIndex > -1){
+            const tempChapters = chapters;
+            tempChapters[chapterIndex].choices = chapter.choices;
+            setChapters([...tempChapters]);
+        }
+    }
+
+    const deleteSelectedChapter = async () => {
+
+        console.log("Deleting Chapter");
+
+        const tempChapters = chapters;
+
+        const chapterResponse = await deleteChapter(props.storyId, selectedChapter.id??"", accessToken);
+
+        if(chapterResponse.status != 200){
+            return; //TODO: Alert
+        }
+
+        tempChapters.splice(selectedChapterIndex);
+
+        setChapters([...tempChapters]);
+
+        setSelectedChapterIndex(-1);
+        setSelectedChapter(defaultChapter);
+    }
+
     return(
         <>
             <div className={'bg-main-dark-color shadow w-full mx-auto sticky top-0'}>
@@ -251,7 +304,15 @@ export default function EnginePage(props: any){
                         </DndContext>
                     </Xwrapper>
                 {selectedChapter.id != '' || selectedChapter.id == null ? (
-                    <ChapterEditor chapter={selectedChapter} editChapter={handleEditChapter} chapters={chapters} addChoice={handleAddChoice} cancelSelectedChapter={cancelSelectedChapter}/>
+                    <ChapterEditor
+                        chapter={selectedChapter}
+                        editChapter={handleEditChapter}
+                        chapters={chapters}
+                        addChoice={handleAddChoice}
+                        cancelSelectedChapter={cancelSelectedChapter}
+                        deleteChoice={handleChoiceDelete}
+                        deleteChapter={deleteSelectedChapter}
+                    />
                 ): null
 
                 }

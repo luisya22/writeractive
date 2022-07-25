@@ -87,4 +87,22 @@ public class ChapterService {
         return chapterDtoMapper.convertToDto(responseChapter);
 
     }
+
+    public int delete(UUID storyId, UUID chapterId){
+        Optional<Story> story = storyRepository.findById(storyId);
+
+        if(story.isEmpty()){
+            throw new StoryNotFoundException("Story not found with id");
+        }
+
+        Optional<Chapter> chapter = chapterRepository.findById(chapterId);
+
+        if(chapter.isEmpty()){
+            throw new ChapterNotFoundException("Chapter not found with id - " + chapterId);
+        }
+
+        chapterRepository.deleteById(chapterId);
+
+        return 1;
+    }
 }

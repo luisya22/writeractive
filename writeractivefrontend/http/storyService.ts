@@ -110,3 +110,24 @@ export const saveChoice = async (chapterId: string | null, choice: ChoiceRequest
 
     return await api.post(`/chapters/${chapterId}/choices`, choice, options);
 }
+
+export const deleteChoice = async (chapterId: string | null, choiceId: string | null, accessToken: string) =>{
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+
+
+    return await api.delete(`/chapters/${chapterId}/choices/${choiceId}`, options);
+}
+
+export const deleteChapter = async (storyId: string, chapterId: string, accessToken: string) => {
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+
+    return await api.delete(`/stories/${storyId}/chapters/${chapterId}`, options);
+}

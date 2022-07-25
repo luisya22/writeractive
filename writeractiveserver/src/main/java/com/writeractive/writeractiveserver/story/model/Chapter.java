@@ -47,6 +47,6 @@ public class Chapter extends BaseEntity {
     @JoinColumn(columnDefinition = "binary(16)")
     Story story;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "parentChapter")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "parentChapter", cascade = {CascadeType.REMOVE})
     List<Choice> choices = new ArrayList<>();
 }

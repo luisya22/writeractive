@@ -27,9 +27,9 @@ export default function ChapterSelectionBox(props: any){
             >
                 <option></option>
                 {
-                    options.map((option: Chapter, index: number) => {
+                    options?.map((option: Chapter, index: number) => {
                         return (
-                            <option value={option.id} key={index}>{option.title}</option>
+                            <option value={option.id??""} key={index}>{option.title}</option>
                         )
                     })
                 }

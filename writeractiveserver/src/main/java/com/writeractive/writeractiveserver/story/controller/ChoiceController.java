@@ -24,4 +24,12 @@ public class ChoiceController {
 
         return ResponseEntity.ok(responseChoice);
     }
+
+    @DeleteMapping("/{choiceId}")
+    public ResponseEntity<?> delete(@PathVariable UUID choiceId){
+
+        int delete = choiceService.deleteChoiceById(choiceId);
+
+        return ResponseEntity.ok("Deleted Successfully");
+    }
 }

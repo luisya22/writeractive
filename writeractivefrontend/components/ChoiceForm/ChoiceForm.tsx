@@ -13,7 +13,8 @@ export default function ChoiceForm(props: {
     chapters: Array<Chapter>,
     key: number,
     index: number,
-    addChoice: Function
+    addChoice: Function,
+    deleteChoice: Function
 }){
 
     const [id, setId] = useState<string>(props.choice.id??"")
@@ -30,7 +31,7 @@ export default function ChoiceForm(props: {
     }
 
     useEffect(() => {
-       handleChoiceSave().then(r => console.log("Saved"));
+       handleChoiceSave().then(r => 1);
     }, [text, selectedChapterId]);
 
 
@@ -60,7 +61,12 @@ export default function ChoiceForm(props: {
 
     return (
         <>
-            <h4 className={'text-lg font-bold mb-2'}>Choice {props.index + 1}</h4>
+            <div className="flex justify-between">
+                <h4 className={'text-lg font-bold mb-2'}>Choice {props.index + 1}</h4>
+                <div>
+                    <p className={'cursor-pointer text-red-500'} onClick={() => props.deleteChoice(props.index)}>Delete</p>
+                </div>
+            </div>
 
             <FormValidationProvider id={'choice-form-' + props.index} onSubmit={handleChoiceSave}>
                 <div className="form">

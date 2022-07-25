@@ -40,4 +40,12 @@ public class ChapterController {
 
         return ResponseEntity.ok(responseChapter);
     }
+
+    @DeleteMapping("/{chapterId}")
+    public ResponseEntity<?> delete(@PathVariable UUID storyId, @PathVariable UUID chapterId){
+
+        chapterService.delete(storyId, chapterId);
+
+        return ResponseEntity.ok("Deleted Successfully");
+    }
 }
