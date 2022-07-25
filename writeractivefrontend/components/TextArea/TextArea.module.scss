@@ -1,0 +1,29 @@
+.textArea{
+  @apply w-full p-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg;
+
+  &::placeholder{
+    @apply text-gray-400;
+  }
+  &:focus{
+
+  }
+}
+
+.errorTextArea{
+  @apply w-full p-3 mb-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg border border-red-500;
+
+  &::placeholder{
+    @apply text-gray-400;
+  }
+  &:focus{
+
+  }
+}
+
+.errorMessage{
+  @apply text-red-500 text-xs italic;
+}
+
+.label{
+  @apply block uppercase tracking-wide text-gray-700 text-xs xl:text-base font-bold mb-2;
+}

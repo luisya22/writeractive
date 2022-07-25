@@ -63,7 +63,7 @@ public class RefreshTokenService {
         return token;
     }
 
-    public int deleteByUserId(Long id){
+    public int deleteById(Long id){
         refreshTokenRepository.deleteById(id);
 
         return 1;

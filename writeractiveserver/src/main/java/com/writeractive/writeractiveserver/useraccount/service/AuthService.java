@@ -19,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Slf4j
@@ -53,6 +54,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
+    @Transactional
     public TokensDto refreshToken(String refreshTokenString, String url){
 
         RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenString);
@@ -66,9 +68,11 @@ public class AuthService {
 
         SecurityUser securityUser = new SecurityUser(refreshToken.getUser(), authorities);
         String accessToken = generateAccessToken(securityUser, url);
-        refreshToken = refreshTokenService.createRefreshToken(refreshToken.getUser().getId());
+        RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(refreshToken.getUser().getId());
 
-        return new TokensDto(accessToken, refreshToken.getToken());
+        refreshTokenService.deleteById(refreshToken.getId());
+
+        return new TokensDto(accessToken, newRefreshToken.getToken());
     }
 
 

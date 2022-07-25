@@ -19,12 +19,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class StoryDto {
 
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
     private UUID id;
 
     private String title;

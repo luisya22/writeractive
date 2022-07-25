@@ -1,5 +1,5 @@
 import {ValidationFunction, Validator} from "../types/types";
-import {createContext, useContext, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 
 type formValidationContextType = {
     data: Map<string, any>,
@@ -40,6 +40,11 @@ const defaultFormState: formData = {
 
 // @ts-ignore
 export function FormValidationProvider({children, id, onSubmit}){
+
+    useEffect(() => {
+        setFormState(defaultFormState);
+    }, [id])
+
 
     const [formState, setFormState] = useState<formData>(defaultFormState);
 

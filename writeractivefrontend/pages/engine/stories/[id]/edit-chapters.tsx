@@ -1,12 +1,12 @@
-import {Chapter, Choice} from "../../../types/types";
+import {Chapter, Choice} from "../../../../types/types";
 import React, {useEffect, useRef, useState} from "react";
 import {DndContext, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
-import ChapterBoxDraggable from "../../../components/StoryEngine/ChapterBox/ChapterBoxDraggable";
+import ChapterBoxDraggable from "../../../../components/StoryEngine/ChapterBox/ChapterBoxDraggable";
 import dynamic from "next/dynamic";
 import { Xwrapper } from "react-xarrows";
 
 import {useDraggable} from "react-use-draggable-scroll";
-import ChapterEditor from "../../../components/StoryEngine/ChapterEditor/ChapterEditor";
+import ChapterEditor from "../../../../components/StoryEngine/ChapterEditor/ChapterEditor";
 
 const Xarrow = dynamic(() => import('react-xarrows'), {
     ssr: false
@@ -96,9 +96,9 @@ export default function EnginePage(props: any){
                                                    index={index}
                                                />
 
-                                               {chapter.choices.map((choice) =>{
+                                               {chapter.choices.map((choice, index) =>{
                                                    return(
-                                                       <Xarrow start={choice.parentChapter} end={choice.nextChapter}/>
+                                                       <Xarrow key={choice.id + '-' + index} start={choice.parentChapter} end={choice.nextChapter}/>
                                                    )
                                                })}
 

@@ -2,6 +2,7 @@ import PROTECTED_ROUTES from "../constants/protectedRoutes";
 import {createContext, useContext, useEffect, useState} from "react";
 import {refreshToken} from "../http/authService";
 import {router} from "next/client";
+import api from "../http/axiosConfig";
 
 type authenticationContextType = {
     accessToken: string,
@@ -86,6 +87,28 @@ export function AuthProvider(props: {children: any, router: any}): any{
         }
     }
 
+    // Axios Interceptor
+    api.interceptors.response.use((response) => {
+        return response;
+    }, async (error) => {
+
+        const originalRequest = error.config;
+
+        if(error.response.status === 403 && !originalRequest._retry){
+            originalRequest._retry = true;
+
+            const response: any = await refreshToken();
+
+            setAccessToken(response.data.accessToken);
+
+            api.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.accessToken;
+
+            return api(originalRequest);
+        }
+
+        return Promise.reject(error);
+    })
+
 
     return (
         <AuthenticationContext.Provider value={providerValue}>
@@ -96,5 +119,6 @@ export function AuthProvider(props: {children: any, router: any}): any{
 
 const protectedRoutes = [
     "/engine",
-    "/auth/login"
+    "/auth/login",
+    "/engine/new-story"
 ]

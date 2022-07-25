@@ -22,9 +22,33 @@ a {
 }
 
 .btn{
-  @apply rounded-3xl font-bold py-2 px-4;
+  @apply rounded-xl font-bold py-2 px-4;
 
   &.btn-primary{
     @apply bg-main-color text-white;
+  }
+
+  &.btn-secondary{
+    @apply bg-main-dark-color text-white;
+  }
+
+  &.btn-light{
+    @apply text-white bg-light;
+  }
+}
+
+.form{
+  @apply flex flex-col items-center space-y-4;
+
+  .form-group{
+    @apply flex flex-col items-start justify-start w-full;
+
+    label{
+      @apply text-lg text-gray-800;
+    }
+
+    input, textarea{
+      @apply border-gray-400 text-gray-500 text-sm;
+    }
   }
 }
