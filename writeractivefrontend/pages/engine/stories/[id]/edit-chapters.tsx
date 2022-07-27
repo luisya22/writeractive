@@ -15,6 +15,7 @@ import {
     updateChapter
 } from "../../../../http/storyService";
 import {useAuthentication} from "../../../../context/AuthContext";
+import Link from "next/link";
 
 const Xarrow = dynamic(() => import('react-xarrows'), {
     ssr: false
@@ -67,7 +68,6 @@ export default function EnginePage(props: any){
 
         getChapters().catch(console.error)
 
-        setChapters(props.data)
     },[]);
 
     const handleDragEnd = async (event:any) => {
@@ -96,7 +96,10 @@ export default function EnginePage(props: any){
     
     const handleEditChapter = async (chapter: Chapter, index: number) =>{
 
-        if(selectedChapterIndex !> -1){
+        console.log("Saving...")
+
+        if(selectedChapterIndex <= -1){
+            console.log(selectedChapterIndex)
             return;
         }
 
@@ -261,8 +264,10 @@ export default function EnginePage(props: any){
                         />Edit</button>
                     </div>
                     <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
-                        <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}
-                        />Test</button>
+                        <Link href={`/engine/stories/${props.storyId}/test-story`}>
+                            <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}
+                            />Test Story</button>
+                        </Link>
                     </div>
                     <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
                         <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}

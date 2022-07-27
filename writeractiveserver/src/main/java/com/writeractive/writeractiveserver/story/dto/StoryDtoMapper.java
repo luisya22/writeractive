@@ -10,7 +10,14 @@ public class StoryDtoMapper {
     private final ModelMapper modelMapper = new ModelMapper();
 
     public StoryDto convertToDto(Story story){
-        return modelMapper.map(story, StoryDto.class);
+
+        StoryDto storyDto = modelMapper.map(story, StoryDto.class);
+
+        if(story.getFirstChapter() != null){
+            storyDto.setFirstChapterId(story.getFirstChapter().getId());
+        }
+
+        return storyDto;
     }
 
     public Story convertToEntity(StoryDto storyDto){

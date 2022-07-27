@@ -4,6 +4,7 @@ import {refreshToken} from "../http/authService";
 import {router} from "next/client";
 import api from "../http/axiosConfig";
 import axios from "axios";
+import {useRouter} from "next/router";
 
 type authenticationContextType = {
     accessToken: string,
@@ -31,6 +32,7 @@ export function AuthProvider(props: {children: any, router: any}): any{
     const [accessToken, setAccessToken] = useState<string>(defaultAuthenticationContextValues.accessToken);
     const [user, setUser] = useState<any>(defaultAuthenticationContextValues.user);
     const [refreshingToken, setRefreshingToken] = useState<boolean>();
+    const router = useRouter();
 
     const setAuthenticationToken = (authenticationToken: string) => {
         setAccessToken(authenticationToken);
@@ -116,7 +118,7 @@ export function AuthProvider(props: {children: any, router: any}): any{
 
 
     const content = () => {
-        if(pathIsProtected && !accessToken){
+        if(pathIsProtected && !accessToken && router.pathname != '/auth/login'){
             return null;
         }
 
@@ -137,4 +139,5 @@ const protectedRoutes = [
     "/engine/new-story",
     "/engine/stories/[id]/edit-story",
     "/engine/stories/[id]/edit-chapters",
+    "/engine/stories/[id]/test-story",
 ]

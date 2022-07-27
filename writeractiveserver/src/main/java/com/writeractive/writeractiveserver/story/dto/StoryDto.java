@@ -26,6 +26,7 @@ public class StoryDto {
     private String coverPage;
     private String genre;
     private String language;
+    private UUID firstChapterId;
 
     @Column(length = 512)
     private String slug;

@@ -7,6 +7,8 @@ import InputField from "../../InputField/InputField";
 import TextArea from "@/components/TextArea/TextArea";
 import ChapterSelectionBox from "@/components/ChapterSelectionBox/ChapterSelectionBox";
 import ChoiceForm from "@/components/ChoiceForm/ChoiceForm";
+import {Simulate} from "react-dom/test-utils";
+import submit = Simulate.submit;
 
 export default function ChapterEditor(props:{
     chapter: Chapter,
