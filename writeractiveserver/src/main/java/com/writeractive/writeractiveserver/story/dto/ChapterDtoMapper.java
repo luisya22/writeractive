@@ -22,6 +22,7 @@ public class ChapterDtoMapper {
         ChapterDto chapterDto = modelMapper.map(chapter, ChapterDto.class);
 
         chapterDto.setStoryId(chapter.getStory().getId());
+        chapterDto.setIsFinalChapter(chapter.isFinalChapter());
 
         List<ChoiceDto> choices = chapter.getChoices()
                 .stream()

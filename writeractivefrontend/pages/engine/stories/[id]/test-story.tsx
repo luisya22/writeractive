@@ -32,7 +32,7 @@ export default function StoryTest(props: any){
     const [story, setStory] = useState<Story>(defaultStory);
     const [chapters, setChapters] = useState<Array<Chapter>>([]);
     const [actualChapter, setActualChapter] = useState<Chapter>(defaultChapter);
-    const [previousChapter, setPreviousChapter] = useState<Chapter>(defaultChapter);
+    const [previousChapters, setPreviousChapters] = useState<Array<Chapter>>([]);
     const {accessToken} = useAuthentication();
 
 
@@ -55,7 +55,6 @@ export default function StoryTest(props: any){
     },[]);
 
     useEffect(() => {
-        console.log("First Chapter", story.firstChapterId, story);
         selectChapter(story.firstChapterId);
     },[chapters])
 
@@ -70,20 +69,25 @@ export default function StoryTest(props: any){
 
     const handleChoiceClick = (chapterId: string|null) => {
 
-        setPreviousChapter(actualChapter);
-
         const chapter: Chapter|undefined = chapters.find(c => c.id == chapterId);
 
         if(!chapter){
             return; //TODO: Alert
         }
 
-        setPreviousChapter(actualChapter);
+        const tempPreviousChapters = previousChapters;
+        tempPreviousChapters.push(actualChapter);
+
+        setPreviousChapters([...tempPreviousChapters]);
         setActualChapter(chapter);
     }
 
     const handleUndoClick = () => {
-        setActualChapter(previousChapter);
+        setActualChapter(previousChapters[previousChapters.length - 1]);
+        const tempPreviousChapters = previousChapters;
+
+        tempPreviousChapters.pop();
+        setPreviousChapters([...tempPreviousChapters]);
     }
 
 
@@ -94,25 +98,27 @@ export default function StoryTest(props: any){
                     <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
                         <Link passHref href={`/engine/stories/${story.id}/edit-chapters`}>
                             <button
-                                className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/plus.png'} alt={'plusIcon'}
+                                className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/undo-white.png'} alt={'plusIcon'}
                             />Go Back</button>
                         </Link>
                     </div>
                 </nav>
             </div>
-            <div className="w-1/3 mx-auto bg-white mt-24 py-6 px-6 flex flex-col items-center">
-                <p className={'pb-10 text-blue-600 cursor-pointer'} onClick={() => handleUndoClick()}>Undo</p>
-                <p className={'text-xl w-full whitespace-pre-wrap'}>{actualChapter.content}</p>
-                <div className={'flex flex-col justify-center items-center my-20 space-y-6 w-1/2'}>
-                    {actualChapter.choices.map(choice => (
-                        <>
-                            <div className="w-full">
-                                <button className={'btn btn-secondary w-full'} onClick={() => handleChoiceClick(choice.nextChapterId)}>{choice.text}</button>
-                            </div>
-                        </>
-                    ))
+            <div className={'mt-24 w-1/2 mx-auto flex justify-center'}>
+                <p className={'pb-10 text-blue-600 cursor-pointer mt-5'} onClick={() => handleUndoClick()}><img className={'w-8 h-8'} src={'/undo-black.png'} alt={"Undo Icon"}/></p>
+                <div className="w-11/12 mx-auto bg-white  py-6 px-10 flex flex-col items-center">
+                    <p className={'text-xl w-full whitespace-pre-wrap'}>{actualChapter?.content}</p>
+                    <div className={'flex flex-col justify-center items-center my-20 space-y-6 w-1/2'}>
+                        {actualChapter?.choices.map(choice => (
+                            <>
+                                <div className="w-full">
+                                    <button className={'btn btn-secondary w-full'} onClick={() => handleChoiceClick(choice.nextChapterId)}>{choice.text}</button>
+                                </div>
+                            </>
+                        ))
 
-                    }
+                        }
+                    </div>
                 </div>
             </div>
         </>

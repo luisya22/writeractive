@@ -14,7 +14,8 @@ export type ChapterUpdateRequest = {
     title: string,
     content: string
     positionX: number | null,
-    positionY: number | null
+    positionY: number | null,
+    isFinalChapter: boolean
 }
 
 export type ChapterCreateRequest = {
@@ -130,4 +131,18 @@ export const deleteChapter = async (storyId: string, chapterId: string, accessTo
     }
 
     return await api.delete(`/stories/${storyId}/chapters/${chapterId}`, options);
+}
+
+export const saveFirstChapter = async (storyId: string, chapterId: string, accessToken: string) => {
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+
+    const data = {
+        firstChapterId: chapterId
+    }
+
+    return await api.patch(`/stories/${storyId}/firstchapter`, data, options)
 }

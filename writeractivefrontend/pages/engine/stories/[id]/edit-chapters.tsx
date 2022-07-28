@@ -1,4 +1,4 @@
-import {Chapter, Choice} from "../../../../types/types";
+import {Chapter, Choice, Story} from "../../../../types/types";
 import React, {useEffect, useRef, useState} from "react";
 import {DndContext, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors} from "@dnd-kit/core";
 import ChapterBoxDraggable from "../../../../components/StoryEngine/ChapterBox/ChapterBoxDraggable";
@@ -10,8 +10,8 @@ import ChapterEditor from "../../../../components/StoryEngine/ChapterEditor/Chap
 import {
     ChapterUpdateRequest, deleteChapter,
     deleteChoice,
-    getChaptersByStory,
-    saveChapter,
+    getChaptersByStory, getStoryById,
+    saveChapter, saveFirstChapter,
     updateChapter
 } from "../../../../http/storyService";
 import {useAuthentication} from "../../../../context/AuthContext";
@@ -52,11 +52,21 @@ export default function EnginePage(props: any){
             activeMouseButton: "Middle"
         });
 
+    const [story, setStory] = useState<Story>();
     const [chapters, setChapters] = useState<Array<Chapter>>([]);
     const [selectedChapter, setSelectedChapter] = useState<Chapter>(defaultChapter);
     const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(-1)
+    const [firstChapter, setFirstChapter] = useState<Chapter>(defaultChapter);
 
     useEffect(() =>{
+
+        const getStory = async () => {
+            const response = await getStoryById(props.storyId, accessToken);
+
+            if(response.status == 200){
+                setStory(response.data)
+            }
+        }
 
         const getChapters = async () => {
             const response = await getChaptersByStory(props.storyId, accessToken);
@@ -67,8 +77,31 @@ export default function EnginePage(props: any){
         }
 
         getChapters().catch(console.error)
+        getStory().catch(console.error)
 
     },[]);
+
+    useEffect(() => {
+        const firstChapter = chapters.find(c => c.id == story?.firstChapterId);
+
+        if(!firstChapter){
+            return;
+        }
+
+        setFirstChapter(firstChapter);
+
+    }, [chapters])
+
+    useEffect(() => {
+        const firstChapter = chapters.find(c => c.id == story?.firstChapterId);
+
+        if(!firstChapter){
+            return;
+        }
+
+        setFirstChapter(firstChapter);
+
+    }, [story])
 
     const handleDragEnd = async (event:any) => {
 
@@ -88,7 +121,8 @@ export default function EnginePage(props: any){
             title: chaptersTemp[chapterIndex].title,
             content: chaptersTemp[chapterIndex].content,
             positionX: chaptersTemp[chapterIndex].positionX,
-            positionY: chaptersTemp[chapterIndex].positionY
+            positionY: chaptersTemp[chapterIndex].positionY,
+            isFinalChapter: chaptersTemp[chapterIndex].isFinalChapter
         }
 
         const chapterResponse = await updateChapter(props.storyId, data, accessToken);
@@ -96,11 +130,19 @@ export default function EnginePage(props: any){
     
     const handleEditChapter = async (chapter: Chapter, index: number) =>{
 
-        console.log("Saving...")
-
         if(selectedChapterIndex <= -1){
-            console.log(selectedChapterIndex)
             return;
+        }
+
+        let isFinalChapter: boolean = false;
+
+
+        console.log("Chapter", chapter.isFinalChapter, chapter)
+
+        if(chapter.isFinalChapter != null){
+            console.log("Adentro")
+            isFinalChapter = chapter.isFinalChapter
+            console.log(isFinalChapter)
         }
 
 
@@ -109,7 +151,8 @@ export default function EnginePage(props: any){
             title: chapter.title,
             content: chapter.content,
             positionX: null,
-            positionY: null
+            positionY: null,
+            isFinalChapter: isFinalChapter
         }
 
         const chapterResponse = await updateChapter(props.storyId, data, accessToken);
@@ -231,8 +274,6 @@ export default function EnginePage(props: any){
 
     const deleteSelectedChapter = async () => {
 
-        console.log("Deleting Chapter");
-
         const tempChapters = chapters;
 
         const chapterResponse = await deleteChapter(props.storyId, selectedChapter.id??"", accessToken);
@@ -249,13 +290,33 @@ export default function EnginePage(props: any){
         setSelectedChapter(defaultChapter);
     }
 
+    const handleFirstChapter = async () => {
+        if(selectedChapter.id == null){
+            return; //TODO: Alert
+        }
+
+        const storyResponse = await saveFirstChapter(props.storyId, selectedChapter.id, accessToken);
+
+        if(storyResponse.status == 200){
+            setStory(storyResponse.data);
+        }
+
+        //TODO: Alert updated
+        console.log("first chapter saved", storyResponse.data.firstChapterId)
+    }
+
+    const startCircleStyle: React.CSSProperties = {
+        position: "absolute",
+        top: firstChapter.positionY??100,
+        left: firstChapter.positionX - 150??100,
+    }
+
     return(
         <>
-            <div className={'bg-main-dark-color shadow w-full mx-auto sticky top-0'}>
-                <nav className={'border-t border-light flex justify-start space-x-2 items-center flex-wrap mx-auto px-4 '}>
-                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
+            <div className={'bg-main-dark-color shadow w-full mx-auto sticky top-0' }>
+                <nav className={'border-t border-light flex justify-start space-x-2 items-center flex-wrap px-4 '}>
+                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleNewChapter}>
                         <button
-                            onClick={handleNewChapter}
                             className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/plus.png'} alt={'plusIcon'}
                         />New</button>
                     </div>
@@ -263,15 +324,18 @@ export default function EnginePage(props: any){
                         <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/edit.png'} alt={'plusIcon'}
                         />Edit</button>
                     </div>
-                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
-                        <Link href={`/engine/stories/${props.storyId}/test-story`}>
+                    <div>
+                        <Link href={`/engine/stories/${props.storyId}/test-story`} className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
                             <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}
                             />Test Story</button>
                         </Link>
                     </div>
-                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
-                        <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}
-                        />Chapters {chapters?.length}</button>
+                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleFirstChapter}>
+                        <button className={'flex items-center text-white'}><img className={'w-5 h-5 mr-1'} src={'/play.png'} alt={'plusIcon'}
+                        />Select as First Chapter</button>
+                    </div>
+                    <div className={'hover:bg-gray-600 self-end hover:opacity-75 px-4 py-2'}>
+                        <button className={'flex items-center text-white'}>Chapters: {chapters?.length}</button>
                     </div>
                 </nav>
             </div>
@@ -282,29 +346,39 @@ export default function EnginePage(props: any){
                             sensors={sensors}
                         >
                            <div ref={ref} {...events} className={'overflow-scroll scrollbar-hide relative h-[90vh] w-100 flex box-border'}>
-                                   {chapters?.map((chapter, index) =>{
-                                       return(
-                                           <div key={chapter.id}>
-                                               <ChapterBoxDraggable
-                                                   chapter={chapter}
-                                                   selected={chapter.id == selectedChapter.id}
-                                                   onChapterClick={handleSetSelectedChapter}
-                                                   index={index}
-                                               />
+                               {chapters?.map((chapter, index) =>{
+                                   return(
+                                       <div key={chapter.id}>
+                                           <ChapterBoxDraggable
+                                               chapter={chapter}
+                                               selected={chapter.id == selectedChapter.id}
+                                               onChapterClick={handleSetSelectedChapter}
+                                               index={index}
+                                           />
 
-                                               {chapter.choices.map((choice, index) =>{
-                                                   return(
-                                                       <>
-                                                           {choice.nextChapterId != null ? (
-                                                               <Xarrow key={choice.id + '-' + index} start={choice.parentChapterId??""} end={choice.nextChapterId??""}/>
-                                                           ):null}
-                                                       </>
-                                                   )
-                                               })}
+                                           {chapter.choices.map((choice, index) =>{
+                                               return(
+                                                   <>
+                                                       {choice.nextChapterId != null ? (
+                                                           <Xarrow key={choice.id + '-' + index} start={choice.parentChapterId??""} end={choice.nextChapterId??""}/>
+                                                       ):null}
+                                                   </>
+                                               )
+                                           })}
 
-                                           </div>
-                                       )
-                                   })}
+                                       </div>
+                                   )
+                               })}
+                               {story?.firstChapterId != null ? (
+                                   <>
+                                       <div id={'startCircle'} className={'rounded-full h-24 w-24 bg-main-color text-white shadow flex justify-center items-center'} style={startCircleStyle}>
+                                            <div>
+                                                <h3 className={'text-2xl font-bold'}>Start</h3>
+                                            </div>
+                                       </div>
+                                       <Xarrow  start={"startCircle"} end={firstChapter.id??""}/>
+                                   </>
+                               ): null}
                            </div>
                         </DndContext>
                     </Xwrapper>

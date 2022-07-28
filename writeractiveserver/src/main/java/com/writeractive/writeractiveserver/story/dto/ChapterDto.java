@@ -15,7 +15,7 @@ public class ChapterDto {
     private UUID id;
     private String content;
     private String title;
-    private boolean isFinalChapter;
+    private Boolean isFinalChapter;
     private boolean published;
     private UUID storyId;
     private Integer positionX;

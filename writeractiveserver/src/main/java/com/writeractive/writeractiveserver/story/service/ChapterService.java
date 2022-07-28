@@ -76,6 +76,7 @@ public class ChapterService {
 
         chapter.get().setTitle(chapterDto.getTitle());
         chapter.get().setContent(chapterDto.getContent());
+        chapter.get().setFinalChapter(Boolean.TRUE.equals(chapterDto.getIsFinalChapter()));
 
         if(chapterDto.getPositionX() != null && chapterDto.getPositionY() != null){
             chapter.get().setPositionX(chapterDto.getPositionX());

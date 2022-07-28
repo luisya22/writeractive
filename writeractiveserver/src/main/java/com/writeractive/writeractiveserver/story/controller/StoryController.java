@@ -1,5 +1,6 @@
 package com.writeractive.writeractiveserver.story.controller;
 
+import com.writeractive.writeractiveserver.story.dto.SaveFirstChapterDto;
 import com.writeractive.writeractiveserver.story.dto.StoryDto;
 import com.writeractive.writeractiveserver.story.service.StoryService;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +53,14 @@ public class StoryController {
         Long userId = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         StoryDto story = storyService.getById(id, userId);
+
+        return ResponseEntity.ok(story);
+    }
+
+    @PatchMapping("/{id}/firstchapter")
+    public ResponseEntity<StoryDto> saveFirstChapter(@PathVariable UUID id, @RequestBody SaveFirstChapterDto saveFirstChapterDto){
+
+        StoryDto story = storyService.saveFirstChapter(id, saveFirstChapterDto);
 
         return ResponseEntity.ok(story);
     }

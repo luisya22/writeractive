@@ -80,6 +80,7 @@ public class SecurityConfig {
                 .mvcMatchers(HttpMethod.GET, "/api/stories/{id}/edit").authenticated()
                 .mvcMatchers("/api/stories/{id}/chapters/*").authenticated()
                 .mvcMatchers("/api/stories/{id}/chapters").authenticated()
+                .mvcMatchers("/api/stories/{id}/firstchapter").authenticated()
                 .mvcMatchers("/api/chapters/*").authenticated()
                 .anyRequest().permitAll();
 

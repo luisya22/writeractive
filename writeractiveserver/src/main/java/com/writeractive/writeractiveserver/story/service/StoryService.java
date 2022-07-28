@@ -1,9 +1,13 @@
 package com.writeractive.writeractiveserver.story.service;
 
+import com.writeractive.writeractiveserver.story.dto.SaveFirstChapterDto;
 import com.writeractive.writeractiveserver.story.dto.StoryDto;
 import com.writeractive.writeractiveserver.story.dto.StoryDtoMapper;
+import com.writeractive.writeractiveserver.story.exception.ChapterNotFoundException;
 import com.writeractive.writeractiveserver.story.exception.StoryNotFoundException;
+import com.writeractive.writeractiveserver.story.model.Chapter;
 import com.writeractive.writeractiveserver.story.model.Story;
+import com.writeractive.writeractiveserver.story.repository.ChapterRepository;
 import com.writeractive.writeractiveserver.story.repository.StoryRepository;
 import com.writeractive.writeractiveserver.useraccount.exception.UserNotFoundException;
 import com.writeractive.writeractiveserver.useraccount.model.User;
@@ -14,7 +18,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -22,11 +25,13 @@ public class StoryService {
 
     private final StoryRepository storyRepository;
     private final UserRepository userRepository;
+    private final ChapterRepository chapterRepository;
     private final StoryDtoMapper storyDtoMapper;
 
-    public StoryService(StoryRepository storyRepository, UserRepository userRepository, StoryDtoMapper storyDtoMapper) {
+    public StoryService(StoryRepository storyRepository, UserRepository userRepository, ChapterRepository chapterRepository, StoryDtoMapper storyDtoMapper) {
         this.storyRepository = storyRepository;
         this.userRepository = userRepository;
+        this.chapterRepository = chapterRepository;
         this.storyDtoMapper = storyDtoMapper;
     }
 
@@ -84,5 +89,26 @@ public class StoryService {
         }
 
         return storyDtoMapper.convertToDto(story.get());
+    }
+
+    public StoryDto saveFirstChapter(UUID storyId, SaveFirstChapterDto saveFirstChapterDto){
+
+        Optional<Story> story = storyRepository.findById(storyId);
+
+        if(story.isEmpty()){
+            throw new StoryNotFoundException("Story not found with id - " + storyId);
+        }
+
+        Optional<Chapter> chapter = chapterRepository.findById(saveFirstChapterDto.getFirstChapterId());
+
+        if(chapter.isEmpty()){
+            throw new ChapterNotFoundException("Chapter not found with id - " + saveFirstChapterDto.getFirstChapterId());
+        }
+
+        story.get().setFirstChapter(chapter.get());
+
+        Story responseStory = storyRepository.save(story.get());
+
+        return storyDtoMapper.convertToDto(responseStory);
     }
 }
