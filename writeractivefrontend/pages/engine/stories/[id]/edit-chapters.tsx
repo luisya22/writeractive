@@ -137,12 +137,9 @@ export default function EnginePage(props: any){
         let isFinalChapter: boolean = false;
 
 
-        console.log("Chapter", chapter.isFinalChapter, chapter)
 
         if(chapter.isFinalChapter != null){
-            console.log("Adentro")
             isFinalChapter = chapter.isFinalChapter
-            console.log(isFinalChapter)
         }
 
 
@@ -302,7 +299,6 @@ export default function EnginePage(props: any){
         }
 
         //TODO: Alert updated
-        console.log("first chapter saved", storyResponse.data.firstChapterId)
     }
 
     const startCircleStyle: React.CSSProperties = {

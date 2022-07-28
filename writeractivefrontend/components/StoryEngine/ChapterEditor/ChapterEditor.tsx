@@ -23,6 +23,7 @@ export default function ChapterEditor(props:{
     const [selectedMenu, setSelectedMenu] = useState<string>("chapterTextMenu");
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
+    const [isFinalChapter, setIsFinalChapter] = useState<boolean>(props.chapter.isFinalChapter);
 
     const requiredValidator = (val: string | number) => {
         if(!val){
@@ -34,24 +35,26 @@ export default function ChapterEditor(props:{
 
     const handleSave = () => {
 
-
         const newChapterData = props.chapter;
         newChapterData.title = title;
         newChapterData.content = content;
+        newChapterData.isFinalChapter = isFinalChapter;
+
 
         props.editChapter(newChapterData)
     }
 
     useEffect(() =>{
+        setIsFinalChapter(props.chapter.isFinalChapter)
         setTitle(props.chapter.title)
-        setContent(props.chapter.content)
+        setContent(props.chapter.content);
     },[props.chapter.title]);
 
     useEffect(() => {
         if(title != null && title != ""){
             handleSave();
         }
-    },[title, content])
+    },[title, content, isFinalChapter])
 
     const handleChoiceAdd = (chapterId: string, choice: Choice, choiceIndex = null) => {
         props.addChoice(chapterId, choice, choiceIndex)
@@ -73,6 +76,10 @@ export default function ChapterEditor(props:{
 
     const deleteChoice = (choiceIndex: number) => {
         props.deleteChoice(choiceIndex)
+    }
+
+    const handleIsFinalChapter = () => {
+        setIsFinalChapter(!isFinalChapter);
     }
 
 
@@ -153,6 +160,8 @@ export default function ChapterEditor(props:{
     }
 
 
+
+
     return(
         <div className={styles.editorWrapper}>
             <div className={styles.editor}>
@@ -161,6 +170,8 @@ export default function ChapterEditor(props:{
                     <div className="flex justify-start space-x-4">
                         <p className={['border-2 border-gray-600 cursor-pointer p-2 hover:bg-gray-400 hover:opacity-75', selectedMenu == "chapterTextMenu" ? " bg-gray-200": ""].join(' ')} onClick={() => setSelectedMenu("chapterTextMenu")}>Chapter Text</p>
                         <p className={['border-2 border-gray-600 cursor-pointer p-2 hover:bg-gray-400 hover:opacity-75', selectedMenu == "choicesMenu" ? " bg-gray-200": ""].join(' ')} onClick={() => setSelectedMenu('choicesMenu')}>Chapter Choices</p>
+                        <p className={['border-2 border-gray-600 cursor-pointer p-2 hover:bg-gray-400 hover:opacity-75', isFinalChapter ? "bg-green": ""].join(' ')} onClick={handleIsFinalChapter}
+                        >{isFinalChapter ? "Remove As Ending Chapter" : "Set As Ending Chapter"} {isFinalChapter}</p>
                         <p className={'text-white border-2 border-gray-600 cursor-pointer p-2 bg-red-600 hover:bg-red-400 hover:opacity-75'} onClick={() => props.deleteChapter()}>Delete</p>
                     </div>
                     <div>
