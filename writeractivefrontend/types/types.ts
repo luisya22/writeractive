@@ -31,7 +31,7 @@ export type Story = {
     language: string,
     published: boolean,
     title: string,
-    author: any,
+    owner: any,
     slug: string,
     firstChapterId: string,
     description: string

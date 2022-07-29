@@ -27,24 +27,7 @@ public class StoryDto {
     private String genre;
     private String language;
     private UUID firstChapterId;
-
-    @Column(length = 512)
     private String slug;
-
-    @Column(columnDefinition = "tinyint(1) default 0")
     private boolean published;
-
-    @ManyToOne
     private User owner;
-
-    public StoryDto(String title, String description, String coverPage, String genre, String language, String slug, boolean published, User owner) {
-        this.title = title;
-        this.description = description;
-        this.coverPage = coverPage;
-        this.genre = genre;
-        this.language = language;
-        this.slug = slug;
-        this.published = published;
-        this.owner = owner;
-    }
 }

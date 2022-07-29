@@ -31,7 +31,7 @@
     }
 
     .navLinks{
-      @apply flex flex-col justify-center items-start ml-20 w-full mt-20 space-y-6;
+      @apply flex flex-col justify-center items-start w-full mt-20 space-y-2;
     }
   }
 }
@@ -39,7 +39,7 @@
 
 li{
   .navLink{
-    @apply flex justify-start items-center w-full space-x-4 cursor-pointer;
+    @apply flex items-center w-full space-x-4 cursor-pointer hover:bg-gray-600 hover:opacity-75 py-4;
 
     .navLogo{
       @apply h-7 w-7;
@@ -52,7 +52,7 @@ li{
 }
 
 .logoutLink{
-  @apply flex justify-start items-center w-full ml-10 space-x-4 cursor-pointer;
+  @apply flex justify-start items-center w-full space-x-4 cursor-pointer;
 }
 
 

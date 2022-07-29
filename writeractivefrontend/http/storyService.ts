@@ -34,6 +34,16 @@ export type ChoiceRequest = {
 
 //TODO: Move token to interceptor
 
+export const getStories = async (accessToken: string) => {
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+
+    return await api.get("/stories", options);
+}
+
 export const saveStory = async (story: StorySaveRequest,accessToken: string) =>{
     const options = {
         headers: {

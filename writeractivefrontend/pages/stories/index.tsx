@@ -7,7 +7,7 @@ import { refType, Xwrapper} from "react-xarrows";
 
 import {useDraggable} from "react-use-draggable-scroll";
 import ChapterEditor from "../../components/StoryEngine/ChapterEditor/ChapterEditor";
-import {getUserStories} from "../../http/storyService";
+import {getStories, getUserStories} from "../../http/storyService";
 import {useAuthentication} from "../../context/AuthContext";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,60 +29,55 @@ export default function EngineMainPage(props: any) {
     const {accessToken} = useAuthentication();
 
     useEffect(() => {
-        const getStories = async () => {
-            const response = await getUserStories(accessToken);
+        const getAllStories = async () => {
+            const response = await getStories(accessToken);
 
             setStories(response.data);
         }
 
-        getStories().catch(console.error)
+        getAllStories().catch(console.error)
     }, [accessToken])
 
     return (
         <>
-            <div className={'px-20 my-20 w-full flex flex-col justify-center items-center'}>
-                <div className={'w-2/3 mb-4 flex justify-between items-center'}>
-                    <h1 className={'text-2xl font-bold'}>My Stories</h1>
-                    <div>
-                        <Link passHref href={'/engine/new-story'}>
-                            <button className="btn btn-primary">New Story</button>
-                        </Link>
+            <div className={'container mx-auto flex flex-col'}>
+                <div className={'px-40'}>
+                    <div className={'w-full bg-main-dark-color my-24 rounded-xl p-10 flex flex-wrap items-center'}>
+                        <div className={'w-2/3'}>
+                            <h1 className={'text-3xl text-white fond-bold mb-4'}>Create your Story</h1>
+                            <p className={'text-gray-300'}>Join thousands of writers who are creating sci-fi, fantasy and all types of interactive fictions. Try Writeractive Engine Today!</p>
+                        </div>
+                        <div className={'w-1/3 flex justify-end'}>
+                            <Link passHref href={'/engine'}>
+                                <button className={'btn btn-primary'}> Write a New Story</button>
+                            </Link>
+                        </div>
+                    </div>
+                    <div className={'flex flex-wrap w-full'}>
+                        {stories.map(story => (
+                            <>
+                                <div className={'w-1/4 px-6'}>
+                                    <div className={'flex flex-col'}>
+                                        <div className={'mb-4'}>
+                                            <Image src={ story.coverPage ? `https://res.cloudinary.com/demo/image/fetch/${story.coverPage}` : '/img.png'}
+                                                   width={'160'}
+                                                   height={'260'}
+                                                   alt={'Image Picture'}
+                                                   layout={'responsive'}
+                                            />
+                                        </div>
+                                        <div className={'flex flex-col items-center justify-center'}>
+                                            <h4 className={'text-2xl font-bold'}>{story.title}</h4>
+                                            <p className={'text-xl text-gray-600'}>{story?.owner?.name}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </>
+                        ))
+
+                        }
                     </div>
                 </div>
-                <div className={'bg-white shadow px-10 py-10'}>
-                    {stories.map(story => (
-                        <>
-                            <div className={'w-full flex justify-between'}>
-                                <div className="w-1/3 flex flex-wrap space-x-6">
-                                    <div className={'h-30 w-28'}>
-                                        <Image src={ story.coverPage ? `https://res.cloudinary.com/demo/image/fetch/${story.coverPage}` : '/img.png'}
-                                               width={'8'}
-                                               height={'13'}
-                                               alt={'Image Picture'}
-                                               layout={'responsive'}
-                                        />
-                                    </div>
-                                    <h3 className={'text-xl font-bold'}>{story.title}</h3>
-                                </div>
-                                <div className={'w-2/3 flex justify-end space-x-2 items-start'}>
-                                    <Link passHref href={`/engine/stories/${story.id}/edit-story`}>
-                                        <button className={'btn btn-primary'}>Edit Story Info</button>
-                                    </Link>
-                                    <Link passHref href={`/engine/stories/${story.id}/edit-chapters`}>
-                                        <button className={'btn btn-secondary'}>Manage Chapters</button>
-                                    </Link>
-                                </div>
-                            </div>
-                            <hr className={'my-4'}/>
-                        </>
-                    ))}
-                </div>
-
-                {/*{stories.map(story =>(*/}
-                {/*    <>*/}
-                {/*        <h1>{story.title}</h1>*/}
-                {/*    </>*/}
-                {/*))}*/}
             </div>
         </>
     )

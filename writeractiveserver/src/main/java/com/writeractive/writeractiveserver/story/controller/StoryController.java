@@ -2,6 +2,7 @@ package com.writeractive.writeractiveserver.story.controller;
 
 import com.writeractive.writeractiveserver.story.dto.SaveFirstChapterDto;
 import com.writeractive.writeractiveserver.story.dto.StoryDto;
+import com.writeractive.writeractiveserver.story.model.Story;
 import com.writeractive.writeractiveserver.story.service.StoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -70,5 +71,12 @@ public class StoryController {
         StoryDto story = storyService.publishStory(id);
 
         return ResponseEntity.ok(story);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<StoryDto>> getAll(){
+
+        List<StoryDto> stories = storyService.getAll();
+        return ResponseEntity.ok(stories);
     }
 }

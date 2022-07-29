@@ -128,4 +128,13 @@ public class StoryService {
 
         return storyDtoMapper.convertToDto(responseStory);
     }
+
+    public List<StoryDto> getAll(){
+        //TODO: Make pagination
+
+        return storyRepository.findAll()
+                .stream()
+                .map(storyDtoMapper::convertToDto)
+                .toList();
+    }
 }
