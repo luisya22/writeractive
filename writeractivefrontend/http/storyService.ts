@@ -146,3 +146,13 @@ export const saveFirstChapter = async (storyId: string, chapterId: string, acces
 
     return await api.patch(`/stories/${storyId}/firstchapter`, data, options)
 }
+
+export const publishStory = async (storyId: string, accessToken: string) => {
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+
+    return await api.post(`/stories/${storyId}/publish`, null, options);
+}

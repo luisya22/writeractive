@@ -111,4 +111,21 @@ public class StoryService {
 
         return storyDtoMapper.convertToDto(responseStory);
     }
+
+    public StoryDto publishStory(UUID storyId){
+
+        //TODO: Validate if it has all the necessary data: Chapters has choices or are ending chpaters etc...
+
+        Optional<Story> story = storyRepository.findById(storyId);
+
+        if(story.isEmpty()){
+            throw new StoryNotFoundException("Story not found with id - " + storyId);
+        }
+
+        story.get().setPublished(true);
+
+        Story responseStory = storyRepository.save(story.get());
+
+        return storyDtoMapper.convertToDto(responseStory);
+    }
 }

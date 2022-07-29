@@ -13,7 +13,8 @@ module.exports = {
         'main-color':"#01baef",
         'hover-color':"#0496C0",
         'main-dark-color':"#2c363f",
-        "light":"#bdbdbd"
+        "light":"#bdbdbd",
+        "end-gradient-color": "#007ed9"
       }
     },
   },

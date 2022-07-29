@@ -1,0 +1,58 @@
+.sidebar{
+  @apply duration-300 relative  h-screen bg-gradient-to-b from-main-color to-end-gradient-color;
+
+  .sidebarContent{
+    @apply flex flex-col justify-center items-center;
+
+    .sidebarHeader{
+      @apply mt-10 flex flex-col items-center;
+      .title{
+        @apply text-4xl font-bold text-white;
+      }
+      .subTitle{
+        @apply text-3xl text-white;
+      }
+    }
+
+    .profileImageWrapper{
+      @apply rounded-full border-4 bg-white border-white w-32 h-32 mt-10;
+
+      .profileImage{
+        @apply h-full w-full;
+      }
+    }
+
+    .usernameWrapper{
+      @apply mt-5;
+
+      .username{
+        @apply text-2xl text-white font-bold;
+      }
+    }
+
+    .navLinks{
+      @apply flex flex-col justify-center items-start ml-20 w-full mt-20 space-y-6;
+    }
+  }
+}
+
+
+li{
+  .navLink{
+    @apply flex justify-start items-center w-full space-x-4 cursor-pointer;
+
+    .navLogo{
+      @apply h-7 w-7;
+    }
+
+    .navText{
+      @apply text-2xl font-bold text-white;
+    }
+  }
+}
+
+.logoutLink{
+  @apply flex justify-start items-center w-full ml-10 space-x-4 cursor-pointer;
+}
+
+

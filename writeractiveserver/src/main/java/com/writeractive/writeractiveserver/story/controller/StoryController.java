@@ -64,4 +64,11 @@ public class StoryController {
 
         return ResponseEntity.ok(story);
     }
+
+    @PostMapping("/{id}/publish")
+    public ResponseEntity<StoryDto> publish(@PathVariable UUID id){
+        StoryDto story = storyService.publishStory(id);
+
+        return ResponseEntity.ok(story);
+    }
 }

@@ -10,7 +10,7 @@ import ChapterEditor from "../../../../components/StoryEngine/ChapterEditor/Chap
 import {
     ChapterUpdateRequest, deleteChapter,
     deleteChoice,
-    getChaptersByStory, getStoryById,
+    getChaptersByStory, getStoryById, publishStory,
     saveChapter, saveFirstChapter,
     updateChapter
 } from "../../../../http/storyService";
@@ -301,6 +301,16 @@ export default function EnginePage(props: any){
         //TODO: Alert updated
     }
 
+    const handleStoryPublish = async () => {
+        const storyResponse = await publishStory(props.storyId, accessToken);
+
+        if(storyResponse.status == 200){
+            setStory(storyResponse.data);
+        }
+
+        //TODO: Alert updated
+    }
+
     const startCircleStyle: React.CSSProperties = {
         position: "absolute",
         top: firstChapter.positionY??100,
@@ -316,9 +326,9 @@ export default function EnginePage(props: any){
                             className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/plus.png'} alt={'plusIcon'}
                         />New</button>
                     </div>
-                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
-                        <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/edit.png'} alt={'plusIcon'}
-                        />Edit</button>
+                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleStoryPublish}>
+                        <button className={['flex items-center text-white', story?.published ? "opacity-75 bg-gray-600": ""].join(" ")}><img className={'w-3 h-3 mr-1'} src={'/edit.png'} alt={'plusIcon'}
+                        />{story?.published ? "Published" : "Publish"}</button>
                     </div>
                     <div>
                         <Link href={`/engine/stories/${props.storyId}/test-story`} className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
