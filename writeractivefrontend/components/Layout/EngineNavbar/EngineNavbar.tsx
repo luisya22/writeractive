@@ -25,7 +25,9 @@ export const EngineNavbar = () => {
                     <h1 className={'text-2xl text-white'}>Writeractive <span className={'text-main-color'}>Engine</span></h1>
                 </div>
                 <div>
-                    <button className={'btn btn-primary'}>Go to Stories</button>
+                    <Link href={'/stories'}>
+                        <button className={'btn btn-primary'}>Go to Stories</button>
+                    </Link>
                 </div>
             </nav>
         </>

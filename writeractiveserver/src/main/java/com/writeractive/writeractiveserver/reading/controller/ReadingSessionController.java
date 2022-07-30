@@ -24,7 +24,7 @@ public class ReadingSessionController {
 
         Long userId = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-        ReadingSessionDto readingSessionDto = readingSessionService.save(userId, storyId);
+        ReadingSessionDto readingSessionDto = readingSessionService.findOrSave(userId, storyId);
 
         return ResponseEntity.ok(readingSessionDto);
     }

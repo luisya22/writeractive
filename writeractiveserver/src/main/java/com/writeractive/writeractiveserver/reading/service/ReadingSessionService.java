@@ -7,11 +7,13 @@ import com.writeractive.writeractiveserver.reading.exception.ReadingBadRequestEx
 import com.writeractive.writeractiveserver.reading.exception.ReadingSessionNotFoundException;
 import com.writeractive.writeractiveserver.reading.model.ReadingSession;
 import com.writeractive.writeractiveserver.reading.repository.ReadingSessionRepository;
-import com.writeractive.writeractiveserver.story.exception.ChapterNotFoundException;
+import com.writeractive.writeractiveserver.story.exception.ChoiceNotFoundException;
 import com.writeractive.writeractiveserver.story.exception.StoryNotFoundException;
 import com.writeractive.writeractiveserver.story.model.Chapter;
+import com.writeractive.writeractiveserver.story.model.Choice;
 import com.writeractive.writeractiveserver.story.model.Story;
 import com.writeractive.writeractiveserver.story.repository.ChapterRepository;
+import com.writeractive.writeractiveserver.story.repository.ChoiceRepository;
 import com.writeractive.writeractiveserver.story.repository.StoryRepository;
 import com.writeractive.writeractiveserver.useraccount.exception.UserNotFoundException;
 import com.writeractive.writeractiveserver.useraccount.model.User;
@@ -28,25 +30,35 @@ public class ReadingSessionService {
     private final UserRepository userRepository;
     private final StoryRepository storyRepository;
     private final ChapterRepository chapterRepository;
+    private final ChoiceRepository choiceRepository;
     private final ReadingSessionRepository readingSessionRepository;
     private final ReadingSessionDtoMapper readingSessionDtoMapper;
 
-    public ReadingSessionService(UserRepository userRepository, StoryRepository storyRepository, ChapterRepository chapterRepository, ReadingSessionRepository readingSessionRepository, ReadingSessionDtoMapper readingSessionDtoMapper) {
+    public ReadingSessionService(UserRepository userRepository, StoryRepository storyRepository, ChapterRepository chapterRepository, ChoiceRepository choiceRepository, ReadingSessionRepository readingSessionRepository, ReadingSessionDtoMapper readingSessionDtoMapper) {
         this.userRepository = userRepository;
         this.storyRepository = storyRepository;
         this.chapterRepository = chapterRepository;
+        this.choiceRepository = choiceRepository;
         this.readingSessionRepository = readingSessionRepository;
         this.readingSessionDtoMapper = readingSessionDtoMapper;
     }
 
-    public ReadingSessionDto save(Long userId, UUID storyId){
+    public ReadingSessionDto findOrSave(Long userId, UUID storyId){
 
         User user = validateUser(userId);
 
         Story story = validateStory(storyId);
 
-        validateReadingSessionDoesNotExists(user, story);
 
+        // Find if exists return
+        Optional<ReadingSession> findReadingSession = readingSessionRepository
+                .getReadingSessionByUserAndStory(user, story);
+
+        if(findReadingSession.isPresent()){
+            return readingSessionDtoMapper.convertToDto(findReadingSession.get());
+        }
+
+        // If it does not exist save and return
         ReadingSession readingSession = new ReadingSession(user, story, story.getFirstChapter());
 
         ReadingSession responseReadingSession =  readingSessionRepository.save(readingSession);
@@ -66,7 +78,14 @@ public class ReadingSessionService {
             throw new ReadingBadRequestException("User does not match with reading session");
         }
 
-        Optional<Chapter> chapter = chapterRepository.findById(updateReadingSessionDto.getChoiceId());
+        Optional<Choice> choice = choiceRepository.findById(updateReadingSessionDto.getChoiceId());
+
+        if(choice.isEmpty()){
+            throw new ChoiceNotFoundException("Choice not found with id - " + updateReadingSessionDto.getChoiceId());
+        }
+
+
+        Optional<Chapter> chapter = chapterRepository.findById(choice.get().getNextChapter().getId());
 
         if(chapter.isEmpty()){
             throw new ReadingBadRequestException("The chapter does not exists");
@@ -126,14 +145,5 @@ public class ReadingSessionService {
         }
 
         return story.get();
-    }
-
-    private void validateReadingSessionDoesNotExists(User user, Story story) {
-        Optional<ReadingSession> validateReadingSession = readingSessionRepository
-                .getReadingSessionByUserAndStory(user, story);
-
-        if(validateReadingSession.isPresent()){
-            throw new ReadingBadRequestException("A story reading session already exists with this user");
-        }
     }
 }

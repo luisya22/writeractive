@@ -58,14 +58,16 @@ export default function EngineMainPage(props: any) {
                             <>
                                 <div className={'w-1/4 px-6'}>
                                     <div className={'flex flex-col'}>
-                                        <div className={'mb-4'}>
-                                            <Image src={ story.coverPage ? `https://res.cloudinary.com/demo/image/fetch/${story.coverPage}` : '/img.png'}
-                                                   width={'160'}
-                                                   height={'260'}
-                                                   alt={'Image Picture'}
-                                                   layout={'responsive'}
-                                            />
-                                        </div>
+                                        <Link href={`/stories/readings/${story.id}/create`}>
+                                            <div className={'mb-4 relative hover:bg-black hover:opacity-75 cursor-pointer transition ease-in-out delay-150 hover:scale-110 duration-300'}>
+                                                <Image src={ story.coverPage ? `https://res.cloudinary.com/demo/image/fetch/${story.coverPage}` : '/img.png'}
+                                                       width={'160'}
+                                                       height={'260'}
+                                                       alt={'Image Picture'}
+                                                       layout={'responsive'}
+                                                />
+                                            </div>
+                                        </Link>
                                         <div className={'flex flex-col items-center justify-center'}>
                                             <h4 className={'text-2xl font-bold'}>{story.title}</h4>
                                             <p className={'text-xl text-gray-600'}>{story?.owner?.name}</p>

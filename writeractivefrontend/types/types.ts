@@ -36,3 +36,11 @@ export type Story = {
     firstChapterId: string,
     description: string
 }
+
+export type ReadingSession = {
+    id: string,
+    story: Story,
+    chapter: Chapter,
+    choices: Array<Choice>,
+    userId: string
+}

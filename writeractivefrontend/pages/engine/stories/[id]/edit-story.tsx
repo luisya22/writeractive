@@ -11,7 +11,7 @@ const defaultStory: Story = {
     language: "",
     published: false,
     title: "",
-    author: "",
+    owner: "",
     slug: "",
     firstChapterId: "",
     description: ""

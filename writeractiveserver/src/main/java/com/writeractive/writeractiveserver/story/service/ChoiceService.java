@@ -50,9 +50,6 @@ public class ChoiceService {
             choice.setNextChapter(nextChapter.get());
         }
 
-
-
-
         Choice choiceDB = choiceRepository.save(choice);
 
         return choiceDtoMapper.convertToDto(choiceDB);

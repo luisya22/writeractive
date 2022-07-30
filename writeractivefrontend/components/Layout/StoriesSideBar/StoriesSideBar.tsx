@@ -35,7 +35,7 @@ export default function StoriesSideBar(props: {
                         <h3 className={`${styles.username}`}>Username</h3>
                     </div>
                     <ul className={styles.navLinks}>
-                        <li className={'w-full'}>
+                        <li className={'w-full'} key={'stories'}>
                             <Link passHref href={"/stories"}>
                                 <div className={`${styles.navLink} ${props.openSidebar ? 'px-16 justify-start' : 'px-0 justify-center'}`}>
                                     <img src="/library.png" alt="library icon" className={styles.navLogo}/>
@@ -43,16 +43,16 @@ export default function StoriesSideBar(props: {
                                 </div>
                             </Link>
                         </li>
-                        <li className={'w-full'}>
-                            <Link passHref href={"/myreadings"}>
+                        <li className={'w-full'} key={'myreadings'}>
+                            <Link passHref href={"/stories/myreadings"}>
                                 <div className={`${styles.navLink} ${props.openSidebar ? 'px-16 justify-start' : 'px-0 justify-center'}`}>
                                     <img src="/open-book.png" alt="library icon" className={styles.navLogo}/>
                                     <h3 className={`${styles.navText} ${props.openSidebar ? '' : 'hidden'}`}>My Readings</h3>
                                 </div>
                             </Link>
                         </li>
-                        <li className={'w-full'}>
-                            <Link passHref href={"/mystories"}>
+                        <li className={'w-full'} key={'mystories'}>
+                            <Link passHref href={"/engine"}>
                                 <div className={`${styles.navLink} ${props.openSidebar ? 'px-16 justify-start' : 'px-0 justify-center'}`}>
                                     <img src="/pencil.png" alt="library icon" className={`${styles.navLogo} ${props.openSidebar ? '' : 'mx-auto'}`}/>
                                     <h3 className={`${styles.navText} ${props.openSidebar ? '' : 'hidden'}`}>My Stories</h3>
@@ -62,7 +62,7 @@ export default function StoriesSideBar(props: {
                     </ul>
                 </div>
                 <ul className={styles.navLinks}>
-                    <li className={`bottom-6 absolute ${styles.logoutLink}`}>
+                    <li className={`bottom-6 absolute ${styles.logoutLink}`} key={'/logout'}>
                         <Link passHref href={"/logout"}>
                             <div className={`${styles.navLink} ${props.openSidebar ? 'px-16 justify-start' : 'px-0 justify-center'}`}>
                                 <img src="/logout.png" alt="library icon" className={styles.navLogo}/>

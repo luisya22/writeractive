@@ -170,6 +170,8 @@ export default function EnginePage(props: any){
 
         const chaptersTemp = chapters;
 
+        console.log("CreatedChoice", choiceIndex, choice);
+
         if(choiceIndex == null){
             choiceIndex = chaptersTemp[selectedChapterIndex].choices.map(c => c.id).indexOf(choice.id);
         }
@@ -181,6 +183,9 @@ export default function EnginePage(props: any){
         }
 
         setChapters([...chaptersTemp]);
+        setSelectedChapter({...chaptersTemp[selectedChapterIndex]});
+
+        console.log("Chapter", chaptersTemp[selectedChapterIndex])
     }
 
     const handleSetSelectedChapter = (chapter: Chapter, index: number) =>{
@@ -258,7 +263,7 @@ export default function EnginePage(props: any){
             return; //TODO: Alert
         }
 
-        chapter.choices.splice(choiceIndex);
+        chapter.choices.splice(choiceIndex, 1);
 
         const chapterIndex = chapters.findIndex(c => c.id == chapter.id);
 
@@ -279,7 +284,7 @@ export default function EnginePage(props: any){
             return; //TODO: Alert
         }
 
-        tempChapters.splice(selectedChapterIndex);
+        tempChapters.splice(selectedChapterIndex, 1);
 
         setChapters([...tempChapters]);
 

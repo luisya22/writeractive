@@ -34,6 +34,10 @@ export default function ChoiceForm(props: {
        handleChoiceSave().then(r => 1);
     }, [text, selectedChapterId]);
 
+    useEffect(() => {
+        setId(props.choice.id??"")
+    }, [props.choice])
+
 
 
     const handleChoiceSave = async () => {

@@ -1,5 +1,6 @@
 package com.writeractive.writeractiveserver.reading.dto;
 
+import com.writeractive.writeractiveserver.story.dto.ChapterDto;
 import com.writeractive.writeractiveserver.story.model.Chapter;
 import com.writeractive.writeractiveserver.story.model.Choice;
 import com.writeractive.writeractiveserver.story.model.Story;
@@ -16,7 +17,7 @@ public class ReadingSessionDto {
 
     private UUID id;
     private Story story;
-    private Chapter chapter;
+    private ChapterDto chapter;
     private List<Choice> choices;
     private Long userId;
 }
