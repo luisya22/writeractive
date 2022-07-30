@@ -16,7 +16,9 @@ export default function Layout(props:{
         if(router.pathname.startsWith("/engine")){
             return (
                 <>
-                    <EngineLayout children={props.children}/>
+                    <EngineLayout>
+                        {props.children}
+                    </EngineLayout>
                 </>
             )
         }
@@ -24,14 +26,18 @@ export default function Layout(props:{
         if(router.pathname.startsWith("/stories")){
             return (
                 <>
-                    <StoriesLayout children={props.children}/>
+                    <StoriesLayout>
+                        {props.children}
+                    </StoriesLayout>
                 </>
             )
         }
 
         return (
             <>
-                <DefaultLayout children={props.children}/>
+                <DefaultLayout>
+                    {props.children}
+                </DefaultLayout>
             </>
         )
     }

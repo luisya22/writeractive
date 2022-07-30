@@ -14,10 +14,12 @@ import com.writeractive.writeractiveserver.useraccount.model.User;
 import com.writeractive.writeractiveserver.useraccount.repository.RoleRepository;
 import com.writeractive.writeractiveserver.useraccount.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -42,8 +44,11 @@ public class AuthService {
 
     public void signUpUser(UserCreateDto userCreateDto){
 
+        Set<String> stringRoles = new HashSet<>();
+        stringRoles.add("ROLE_USER");
+
         validateUsernameAndEmail(userCreateDto.getUsername(), userCreateDto.getEmail());
-        Set<Role> roles = validateRoles(userCreateDto.getRoles());
+        Set<Role> roles = validateRoles(stringRoles);
 
 
         User user = userCreateDtoMapper.convertToEntity(userCreateDto);
@@ -74,9 +79,13 @@ public class AuthService {
         return new TokensDto(accessToken, newRefreshToken.getToken());
     }
 
+    public void logoutSession(String refreshTokenString){
+        RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenString);
+        refreshTokenService.deleteById(refreshToken.getId());
+    }
 
 
-    // Utility classes
+    // Utility methods
 
     private Set<Role> validateRoles(Set<String> roles){
 

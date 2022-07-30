@@ -89,6 +89,7 @@ export function FormValidationProvider({children, id, onSubmit}){
                 messages = validator.reduce((result: Array<string>, validationFunction:  (value: string, data: Map<string, any>) => Array<string>) =>{
 
                     const err: Array<string> = validationFunction(value.value, data);
+
                     return [...result, ...err]
                 }, []);
             }

@@ -63,7 +63,7 @@ export default function StoriesSideBar(props: {
                 </div>
                 <ul className={styles.navLinks}>
                     <li className={`bottom-6 absolute ${styles.logoutLink}`} key={'/logout'}>
-                        <Link passHref href={"/logout"}>
+                        <Link passHref href={"/auth/logout"}>
                             <div className={`${styles.navLink} ${props.openSidebar ? 'px-16 justify-start' : 'px-0 justify-center'}`}>
                                 <img src="/logout.png" alt="library icon" className={styles.navLogo}/>
                                 <h3 className={`${styles.navText} ${props.openSidebar ? '' : 'hidden'}`}>Logout</h3>

@@ -13,7 +13,7 @@ export default function CreateReading(props: any){
 
         const getReadingSession = async () => {
 
-            const readingSessionResponse = await findOrSaveReadingSession(props.storyId, accessToken);
+            const readingSessionResponse = await findOrSaveReadingSession(props.storyId, accessToken??"");
 
             if(readingSessionResponse.status == 200){
                 await router.push(`/stories/readings/${readingSessionResponse.data.id}/read`)

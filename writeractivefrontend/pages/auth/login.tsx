@@ -27,7 +27,7 @@ export default function LonginForm(props: any){
 
         if(loginResponse.status == 200){
             await setAuthenticationToken(loginResponse.data.accessToken);
-            await router.push('/engine') //TODO: move to stories first
+            await router.push('/stories') //TODO: move to stories first
         }
     }
 
@@ -42,26 +42,42 @@ export default function LonginForm(props: any){
     return(
         <>
             <div className={'absolute h-[90vh] flex justify-center items-center   w-full'}>
-                <div className={'bg-white px-4 py-10 rounded-xl w-1/3'}>
+                <div className={'bg-white px-4 py-10 rounded-xl w-1/4'}>
                     <FormValidationProvider onSubmit={handleLogin} id={'login-form'}>
-                        <h1 className={'text-2xl'}>Log in</h1>
-                        <hr/>
-                        <div className="flex flex-col items-center ">
-                            <InputField
-                                data={email}
-                                setData={setEmail}
-                                placeholder={'Email'}
-                                name={'email'}
-                                validators={[requiredValidator]}
-                            />
-                            <PasswordField
-                                data={password}
-                                setData={setPassword}
-                                placeholder={'Password'}
-                                name={'password'}
-                                validators={[requiredValidator]}
-                            />
-                            <button type={'submit'} className={'btn btn-primary'}>Log In</button>
+                        <div className={'w-ful flex flex-col items-center'}>
+                            <h1 className={'text-4xl font-bold'}>Log In</h1>
+                            <p className={'mt-2'}>Not registered yet? <span className={'text-main-color'}>Create an account</span></p>
+                        </div>
+                        <div className="flex flex-col items-center w-full mt-10 space-y-6 px-6">
+                            <div className="form-group w-full flex flex-col items-center justify-center">
+                                <div className="w-full">
+                                    <InputField
+                                        data={email}
+                                        setData={setEmail}
+                                        placeholder={'Email'}
+                                        name={'email'}
+                                        label={'Email'}
+                                        validators={[requiredValidator]}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group w-full">
+                                <div className="form-group w-full flex flex-col items-center justify-center">
+                                    <div className="w-full">
+                                        <PasswordField
+                                            data={password}
+                                            setData={setPassword}
+                                            placeholder={'Password'}
+                                            name={'password'}
+                                            label={'Password'}
+                                            validators={[requiredValidator]}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={'mt-10'}>
+                                <button type={'submit'} className={'btn btn-primary'}>Log In</button>
+                            </div>
                         </div>
                     </FormValidationProvider>
                 </div>

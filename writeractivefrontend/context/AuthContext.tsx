@@ -7,9 +7,9 @@ import axios from "axios";
 import {useRouter} from "next/router";
 
 type authenticationContextType = {
-    accessToken: string,
+    accessToken: string|null,
     user: any, //TODO: Set User type
-    setAuthenticationToken: (accessToken: string) => void,
+    setAuthenticationToken: (accessToken: string|null) => void,
     setAuthenticationUser: (user: any) => void
 }
 
@@ -17,7 +17,7 @@ type authenticationContextType = {
 const defaultAuthenticationContextValues: authenticationContextType = {
     accessToken: "",
     user: {},
-    setAuthenticationToken: (accessToken: string) => {},
+    setAuthenticationToken: (accessToken: string|null) => {},
     setAuthenticationUser: (user: any) => {}
 }
 
@@ -29,12 +29,12 @@ export function useAuthentication(){
 
 export function AuthProvider(props: {children: any, router: any}): any{
 
-    const [accessToken, setAccessToken] = useState<string>(defaultAuthenticationContextValues.accessToken);
+    const [accessToken, setAccessToken] = useState<string|null>(defaultAuthenticationContextValues.accessToken);
     const [user, setUser] = useState<any>(defaultAuthenticationContextValues.user);
     const [refreshingToken, setRefreshingToken] = useState<boolean>();
     const router = useRouter();
 
-    const setAuthenticationToken = (authenticationToken: string) => {
+    const setAuthenticationToken = (authenticationToken: string|null) => {
         setAccessToken(authenticationToken);
     }
 
