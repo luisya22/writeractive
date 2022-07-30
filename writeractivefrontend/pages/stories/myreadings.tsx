@@ -12,7 +12,7 @@ export default function MyReadings() {
 
     useEffect(() => {
         const getAllReadings = async () => {
-            const response = await getReadingSessions(accessToken);
+            const response = await getReadingSessions(accessToken??"");
 
             if(response.status == 200){
                 setReadings(response.data);
@@ -55,7 +55,7 @@ export default function MyReadings() {
                                         </Link>
                                         <div className={'flex flex-col items-center justify-center'}>
                                             <h4 className={'text-2xl font-bold'}>{reading.story.title}</h4>
-                                            <p className={'text-xl text-gray-600'}>{reading.story?.owner?.name}</p>
+                                            <p className={'text-xl text-gray-600'}>{reading.story?.owner?.username}</p>
                                         </div>
                                     </div>
                                 </div>

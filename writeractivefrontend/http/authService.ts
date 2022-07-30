@@ -27,3 +27,12 @@ export const refreshToken = async () => {
 export const logout = async () => {
     return await api.post("/auth/logout");
 }
+
+export const getUser = async (accessToken: string | null) => {
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+    return await api.get( "/auth/user", options)
+}

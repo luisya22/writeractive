@@ -12,7 +12,7 @@ export default function EngineMainPage(props: any) {
 
     useEffect(() => {
         const getAllStories = async () => {
-            const response = await getStories(accessToken);
+            const response = await getStories(accessToken??"");
 
             setStories(response.data);
         }
@@ -52,7 +52,7 @@ export default function EngineMainPage(props: any) {
                                         </Link>
                                         <div className={'flex flex-col items-center justify-center'}>
                                             <h4 className={'text-2xl font-bold'}>{story.title}</h4>
-                                            <p className={'text-xl text-gray-600'}>{story?.owner?.name}</p>
+                                            <p className={'text-xl text-gray-600'}>{story?.owner?.username}</p>
                                         </div>
                                     </div>
                                 </div>

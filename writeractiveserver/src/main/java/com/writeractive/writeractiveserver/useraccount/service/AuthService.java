@@ -2,11 +2,14 @@ package com.writeractive.writeractiveserver.useraccount.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.writeractive.writeractiveserver.reading.dto.UserInfoDto;
+import com.writeractive.writeractiveserver.reading.dto.UserInfoDtoMapper;
 import com.writeractive.writeractiveserver.useraccount.dto.TokensDto;
 import com.writeractive.writeractiveserver.useraccount.exception.RoleNotFoundException;
 import com.writeractive.writeractiveserver.useraccount.exception.UserExistsException;
 import com.writeractive.writeractiveserver.useraccount.dto.UserCreateDto;
 import com.writeractive.writeractiveserver.useraccount.dto.UserCreateDtoMapper;
+import com.writeractive.writeractiveserver.useraccount.exception.UserNotFoundException;
 import com.writeractive.writeractiveserver.useraccount.model.RefreshToken;
 import com.writeractive.writeractiveserver.useraccount.model.Role;
 import com.writeractive.writeractiveserver.useraccount.model.SecurityUser;
@@ -14,14 +17,11 @@ import com.writeractive.writeractiveserver.useraccount.model.User;
 import com.writeractive.writeractiveserver.useraccount.repository.RoleRepository;
 import com.writeractive.writeractiveserver.useraccount.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Slf4j
@@ -33,13 +33,15 @@ public class AuthService {
     private final UserCreateDtoMapper userCreateDtoMapper;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
+    private final UserInfoDtoMapper userInfoDtoMapper;
 
-    public AuthService(UserRepository userRepository, UserCreateDtoMapper userCreateDtoMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService) {
+    public AuthService(UserRepository userRepository, UserCreateDtoMapper userCreateDtoMapper, RoleRepository roleRepository, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService, UserInfoDtoMapper userInfoDtoMapper) {
         this.userRepository = userRepository;
         this.userCreateDtoMapper = userCreateDtoMapper;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenService = refreshTokenService;
+        this.userInfoDtoMapper = userInfoDtoMapper;
     }
 
     public void signUpUser(UserCreateDto userCreateDto){
@@ -82,6 +84,17 @@ public class AuthService {
     public void logoutSession(String refreshTokenString){
         RefreshToken refreshToken = refreshTokenService.findByToken(refreshTokenString);
         refreshTokenService.deleteById(refreshToken.getId());
+    }
+
+    public UserInfoDto getUserInfo(Long id){
+
+        Optional<User> user = userRepository.findById(id);
+
+        if(user.isEmpty()){
+            throw new UserNotFoundException("User not found with id - " + id);
+        }
+
+        return userInfoDtoMapper.convertToDto(user.get());
     }
 
 

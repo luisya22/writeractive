@@ -1,5 +1,6 @@
 package com.writeractive.writeractiveserver.useraccount.controller;
 
+import com.writeractive.writeractiveserver.reading.dto.UserInfoDto;
 import com.writeractive.writeractiveserver.useraccount.dto.TokensDto;
 import com.writeractive.writeractiveserver.useraccount.dto.UserCreateDto;
 import com.writeractive.writeractiveserver.useraccount.repository.RoleRepository;
@@ -8,6 +9,7 @@ import com.writeractive.writeractiveserver.useraccount.service.AuthService;
 import com.writeractive.writeractiveserver.useraccount.service.RefreshTokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,5 +82,14 @@ public class AuthController {
         response.addCookie(refreshTokenCookie);
 
         return ResponseEntity.ok("Logout successful");
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<UserInfoDto> getUserInfo(){
+        Long userId = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        UserInfoDto user = authService.getUserInfo(userId);
+
+        return ResponseEntity.ok(user);
     }
 }

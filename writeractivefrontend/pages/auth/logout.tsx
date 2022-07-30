@@ -6,7 +6,7 @@ import {useAuthentication} from "../../context/AuthContext";
 export default function Logout(props: any){
 
     const router = useRouter();
-    const {setAuthenticationToken} = useAuthentication();
+    const {setAuthenticationToken, setAuthenticationUser} = useAuthentication();
 
     useEffect(() => {
         const logoutRequest = async () => {
@@ -14,6 +14,7 @@ export default function Logout(props: any){
 
             if(logoutResponse.status == 200){
                 setAuthenticationToken(null);
+                setAuthenticationUser({});
                 await router.push('/auth/login');
             }
         }

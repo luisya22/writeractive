@@ -1,6 +1,6 @@
 import PROTECTED_ROUTES from "../constants/protectedRoutes";
 import {createContext, useContext, useEffect, useState} from "react";
-import {refreshToken} from "../http/authService";
+import {getUser, refreshToken} from "../http/authService";
 import {router} from "next/client";
 import api from "../http/axiosConfig";
 import axios from "axios";
@@ -82,6 +82,24 @@ export function AuthProvider(props: {children: any, router: any}): any{
         );
 
     },[props.router.pathname, accessToken])
+
+    useEffect(() =>{
+        const getUserInfo = async () => {
+
+            console.log("Getting User");
+            const userInfoResponse = await getUser(accessToken);
+
+            if(userInfoResponse.status == 200){
+                setUser(userInfoResponse.data);
+            }
+        }
+
+        console.log("User", user.id == null, accessToken!=null, user);
+
+        if(user.id == null && accessToken != null){
+            getUserInfo().catch(console.error)
+        }
+    })
 
     const pushIfNotLogin = () => {
         if(props.router.pathname != '/auth/login'){

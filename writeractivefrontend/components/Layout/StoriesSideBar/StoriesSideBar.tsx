@@ -1,12 +1,14 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import styles from "./StoriesSideBar.module.scss";
 import Link from "next/link";
+import {useAuthentication} from "../../../context/AuthContext";
 
 export default function StoriesSideBar(props: {
     openSidebar: boolean,
     setOpenSidebar: Dispatch<SetStateAction<boolean>>
 }){
 
+    const {user} = useAuthentication();
 
     if(typeof window !== 'undefined'){
         console.log(window.innerWidth, window.innerHeight);
@@ -32,7 +34,7 @@ export default function StoriesSideBar(props: {
                         <img src="/user.png" alt="User Picture" className={styles.profileImage}/>
                     </div>
                     <div className={`${styles.usernameWrapper} ${props.openSidebar ? '' : 'hidden'}`}>
-                        <h3 className={`${styles.username}`}>Username</h3>
+                        <h3 className={`${styles.username}`}>{user?.username}</h3>
                     </div>
                     <ul className={styles.navLinks}>
                         <li className={'w-full'} key={'stories'}>
