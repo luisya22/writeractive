@@ -34,3 +34,23 @@ export const updateReadingSession = async (readingSessionId: string, choiceId: s
 
     return await api.patch(`/readings/${readingSessionId}`, data, options);
 }
+
+export const getReadingSessions = async (accessToken: string) => {
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+
+    return await api.get(`/readings`, options);
+}
+
+export const restartReadingSession = async (readingSessionId: string, accessToken: string) => {
+    const options = {
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    }
+
+    return await api.patch(`/readings/${readingSessionId}/restart`, null, options);
+}

@@ -1,24 +1,27 @@
-import {Story} from "../../types/types";
 import React, {useEffect, useState} from "react";
-import {getStories} from "../../http/storyService";
+import {ReadingSession} from "../../types/types";
 import {useAuthentication} from "../../context/AuthContext";
-import Image from "next/image";
+import {getReadingSessions} from "../../http/readingService";
 import Link from "next/link";
+import Image from "next/image";
 
-export default function EngineMainPage(props: any) {
+export default function MyReadings() {
 
-    const [stories, setStories] = useState<Array<Story>>([]);
+    const [readings, setReadings] = useState<Array<ReadingSession>>([]);
     const {accessToken} = useAuthentication();
 
     useEffect(() => {
-        const getAllStories = async () => {
-            const response = await getStories(accessToken);
+        const getAllReadings = async () => {
+            const response = await getReadingSessions(accessToken);
 
-            setStories(response.data);
+            if(response.status == 200){
+                setReadings(response.data);
+            }
         }
 
-        getAllStories().catch(console.error)
-    }, [accessToken])
+        getAllReadings().catch(console.error)
+
+    }, []);
 
     return (
         <>
@@ -36,13 +39,13 @@ export default function EngineMainPage(props: any) {
                         </div>
                     </div>
                     <div className={'flex flex-wrap w-full'}>
-                        {stories.map(story => (
+                        {readings.map(reading => (
                             <>
-                                <div className={'w-1/4 px-6'}>
+                                <div key={reading.id} className={'w-1/4 px-6'}>
                                     <div className={'flex flex-col'}>
-                                        <Link href={`/stories/readings/${story.id}/create`}>
+                                        <Link href={`/stories/readings/${reading.id}/read`}>
                                             <div className={'mb-4 relative hover:bg-black hover:opacity-75 cursor-pointer transition ease-in-out delay-150 hover:scale-110 duration-300'}>
-                                                <Image src={ story.coverPage ? `https://res.cloudinary.com/demo/image/fetch/${story.coverPage}` : '/img.png'}
+                                                <Image src={ reading.story.coverPage ? `https://res.cloudinary.com/demo/image/fetch/${reading.story.coverPage}` : '/img.png'}
                                                        width={'160'}
                                                        height={'260'}
                                                        alt={'Image Picture'}
@@ -51,8 +54,8 @@ export default function EngineMainPage(props: any) {
                                             </div>
                                         </Link>
                                         <div className={'flex flex-col items-center justify-center'}>
-                                            <h4 className={'text-2xl font-bold'}>{story.title}</h4>
-                                            <p className={'text-xl text-gray-600'}>{story?.owner?.name}</p>
+                                            <h4 className={'text-2xl font-bold'}>{reading.story.title}</h4>
+                                            <p className={'text-xl text-gray-600'}>{reading.story?.owner?.name}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -65,6 +68,7 @@ export default function EngineMainPage(props: any) {
             </div>
         </>
     )
+
 }
 
 export function getServerSideProps(){
@@ -77,4 +81,3 @@ export function getServerSideProps(){
         }
     }
 }
-

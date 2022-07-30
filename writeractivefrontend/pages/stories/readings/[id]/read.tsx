@@ -2,7 +2,7 @@ import {useAuthentication} from "../../../../context/AuthContext";
 import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
 import {Chapter, Choice, ReadingSession, Story} from "../../../../types/types";
-import {getReadingSessionById, updateReadingSession} from "../../../../http/readingService";
+import {getReadingSessionById, restartReadingSession, updateReadingSession} from "../../../../http/readingService";
 import Link from "next/link";
 
 export default function Read(props: any){
@@ -32,7 +32,16 @@ export default function Read(props: any){
         console.log(readingSessionResponse.data, readingSessionResponse.status)
 
         if(readingSessionResponse.status == 200){
-            setReadingSession(readingSessionResponse.data)
+            setReadingSession(readingSessionResponse.data);
+        }
+    }
+
+    const handleRestartClick = async () => {
+        const readingSessionResponse = await restartReadingSession(readingSession?.id??"", accessToken);
+
+        if(readingSessionResponse.status == 200){
+            console.log("Restart response", readingSessionResponse.data);
+            setReadingSession(readingSessionResponse.data);
         }
     }
 
@@ -46,11 +55,11 @@ export default function Read(props: any){
                             <>
                                 <p className={'text-xl w-full'}>You reached the end of the story</p>
                                 <div className={'w-full'}>
-                                    <button className={'btn btn-secondary'}>Start Again</button>
+                                    <button className={'btn btn-secondary w-full'} onClick={handleRestartClick}>Start Again</button>
                                 </div>
                                 <div className={'w-full'}>
                                     <Link passHref href={'/stories'}>
-                                        <button className={'btn btn-secondary'}>Read New Stories</button>
+                                        <button className={'btn btn-secondary w-full'}>Read New Stories</button>
                                     </Link>
                                 </div>
                             </>
