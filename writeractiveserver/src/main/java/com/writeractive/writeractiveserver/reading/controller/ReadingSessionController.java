@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/readings/")
+@RequestMapping("/api/readings")
 public class ReadingSessionController {
 
     private final ReadingSessionService readingSessionService;
@@ -41,6 +42,14 @@ public class ReadingSessionController {
         return ResponseEntity.ok(readingSessionDto);
     }
 
+    @PatchMapping("/{readingSessionId}/restart")
+    public ResponseEntity<ReadingSessionDto> restart(@PathVariable UUID readingSessionId){
+
+        ReadingSessionDto readingSessionDto = readingSessionService.restartSession(readingSessionId);
+
+        return ResponseEntity.ok(readingSessionDto);
+    }
+
     @GetMapping("/{readingSessionId}")
     public ResponseEntity<ReadingSessionDto> getById(@PathVariable UUID readingSessionId){
         Long userId = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
@@ -48,5 +57,14 @@ public class ReadingSessionController {
         ReadingSessionDto readingSessionDto = readingSessionService.getByReadingSessionId(readingSessionId, userId);
 
         return ResponseEntity.ok(readingSessionDto);
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<ReadingSessionDto>> getAllByUserId(){
+        Long userId = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        List<ReadingSessionDto> readingSessions = readingSessionService.getAllByUserId(userId);
+
+        return ResponseEntity.ok(readingSessions);
     }
 }

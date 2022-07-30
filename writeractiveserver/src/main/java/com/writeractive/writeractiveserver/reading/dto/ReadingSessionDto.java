@@ -1,9 +1,8 @@
 package com.writeractive.writeractiveserver.reading.dto;
 
 import com.writeractive.writeractiveserver.story.dto.ChapterDto;
-import com.writeractive.writeractiveserver.story.model.Chapter;
+import com.writeractive.writeractiveserver.story.dto.StoryDto;
 import com.writeractive.writeractiveserver.story.model.Choice;
-import com.writeractive.writeractiveserver.story.model.Story;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ import java.util.UUID;
 public class ReadingSessionDto {
 
     private UUID id;
-    private Story story;
+    private StoryDto story;
     private ChapterDto chapter;
     private List<Choice> choices;
     private Long userId;

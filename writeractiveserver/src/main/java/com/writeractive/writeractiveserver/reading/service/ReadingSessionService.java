@@ -20,6 +20,7 @@ import com.writeractive.writeractiveserver.useraccount.model.User;
 import com.writeractive.writeractiveserver.useraccount.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -117,6 +118,39 @@ public class ReadingSessionService {
         ReadingSessionDto readingSessionDto = readingSessionDtoMapper.convertToDto(readingSession.get());
 
         readingSessionDto.setChoices(readingSession.get().getChapter().getChoices());
+
+        return readingSessionDto;
+    }
+
+    public List<ReadingSessionDto> getAllByUserId(Long userId){
+        Optional<User> user = userRepository.findById(userId);
+
+        if(user.isEmpty()){
+            throw new UserNotFoundException("User not found with id - " + userId);
+        }
+
+        List<ReadingSession> readingSessions = readingSessionRepository.findAllByUser(user.get());
+
+        return readingSessions.stream()
+                .map(readingSessionDtoMapper::convertToDto)
+                .toList();
+    }
+
+    public ReadingSessionDto restartSession(UUID readingSessionId){
+        Optional<ReadingSession> readingSession = readingSessionRepository.findById(readingSessionId);
+
+        if(readingSession.isEmpty()){
+            throw new ReadingSessionNotFoundException("Reading Session not found with id: " + readingSessionId);
+        }
+
+        readingSession.get().setChapter(readingSession.get().getStory().getFirstChapter());
+
+        ReadingSession responseReadingSession =  readingSessionRepository.save(readingSession.get());
+
+        ReadingSessionDto readingSessionDto = readingSessionDtoMapper.convertToDto(responseReadingSession);
+
+        readingSessionDto.setChoices(responseReadingSession.getChapter().getChoices());
+
 
         return readingSessionDto;
     }
