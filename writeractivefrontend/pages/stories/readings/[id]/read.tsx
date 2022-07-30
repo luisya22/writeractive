@@ -48,7 +48,7 @@ export default function Read(props: any){
     return(
         <>
             <div className="mt-24 w-1/2 mx-auto">
-                <div className="w-full bg-white py-6 px-10 flex flex-col items-center">
+                <div className="w-full bg-white pt-6 px-10 flex flex-col items-center mb-4">
                     <p className="text-xl w-full whitespace-pre-wrap">{readingSession?.chapter.content}</p>
                     <div className={'flex flex-col justify-center items-center my-20 space-y-6 w-1/2'}>
                         {readingSession?.chapter.isFinalChapter? (
