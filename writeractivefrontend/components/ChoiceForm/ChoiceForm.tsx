@@ -52,7 +52,7 @@ export default function ChoiceForm(props: {
             return;
         }
 
-        const choiceResponse = await saveChoice(props.chapterId, data, accessToken);
+        const choiceResponse = await saveChoice(props.chapterId, data, accessToken??"");
 
         if(choiceResponse?.status != 200){
             return; //TODO: Alert

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.writeractive</groupId>
 	<artifactId>writeractiveserver</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-RELEASE</version>
 	<name>writeractiveserver</name>
 	<description>A tool to build interactive and non-linear stories</description>
 	<properties>
@@ -85,6 +85,27 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>3.2.0</version>
+				<configuration>
+					<from>
+						<image>openjdk:19-jdk-alpine3.15</image>
+					</from>
+					<to>
+						<image>docker.io/luismatos14/writeractive-backend:${project.version}</image>
+					</to>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>dockerBuild</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

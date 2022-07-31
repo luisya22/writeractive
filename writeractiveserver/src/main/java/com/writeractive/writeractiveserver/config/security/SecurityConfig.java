@@ -60,7 +60,7 @@ public class SecurityConfig {
                 CorsConfiguration config = new CorsConfiguration();
 
                 //TODO: Move to env variable
-                config.setAllowedOrigins(List.of("https://programmingbytes.io","https://testing.programmingbytes.io","http://localhost:3000"));
+                config.setAllowedOrigins(List.of("https://writeractive.luismatosgarcia.dev","http://localhost:3000"));
                 config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                 config.setAllowedHeaders(List.of("*"));
                 config.setAllowCredentials(true);
