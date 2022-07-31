@@ -7,7 +7,7 @@ Writeractive is a website and MIT license open source project where users can cr
 - PlanetScale DB (MySQL) -> Database
 
 # Important Links
-1. [Website](https://writeractive.luismatosgarcia.dev "Website")
-2. [Blog](https://writeractive.luismatosgarcia.dev "Blog")
+1. [Website](https://writeractive.luismatosgarcia.dev)
+2. [Blog](https://writeractive.luismatosgarcia.dev)
 
-Thanks to [PlanetScale](https://planetscale.com "PlanetScale") and [Hashnode](https://hashnode.com "Hashnode") for the opportunity provided.
+Thanks to [PlanetScale](https://planetscale.com) and [Hashnode](https://hashnode.com) for the opportunity provided.
