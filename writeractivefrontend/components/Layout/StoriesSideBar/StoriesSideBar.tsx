@@ -20,11 +20,9 @@ export default function StoriesSideBar(props: {
 
     return (
         <>
-            {!props.openSidebar ? (
-                <div className={'p-2 cursor-pointer lg:hidden z-[100]'} onClick={() => props.setOpenSidebar(!props.openSidebar)}>
-                    <img src="/menu.png" alt="library icon" className={styles.menuIcon}/>
-                </div>
-            ):null}
+            <div className={'p-2 cursor-pointer lg:hidden'} onClick={() => props.setOpenSidebar(!props.openSidebar)}>
+                <img src="/menu.png" alt="library icon" className={styles.menuIcon}/>
+            </div>
             <div className={`${props.openSidebar ? "translate-x-0 ease-in-out duration-300 w-2/3 md:w-3/12 lg:w-3/12 xl:w-2/12" : "-translate-x-full lg:translate-x-0 ease-in-out duration-300 lg:w-20 lg:block"} ${styles.sidebar}`}>
                 <div className={'p-4 cursor-pointer lg:hidden'} onClick={() => props.setOpenSidebar(!props.openSidebar)}>
                     <img src="/close.png" alt="library icon" className={styles.closeIcon}/>

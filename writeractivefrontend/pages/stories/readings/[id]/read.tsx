@@ -14,7 +14,7 @@ export default function Read(props: any){
     useEffect(() => {
 
         const getReadingSession = async () => {
-            const readingSessionResponse = await getReadingSessionById(props.readingSessionId, accessToken);
+            const readingSessionResponse = await getReadingSessionById(props.readingSessionId, accessToken??"");
 
             if(readingSessionResponse.status == 200){
                 setReadingSession(readingSessionResponse.data);
@@ -27,7 +27,7 @@ export default function Read(props: any){
 
     const handleChoiceClick = async (choiceId: string | null) => {
 
-        const readingSessionResponse = await updateReadingSession(readingSession?.id??"", choiceId??"", accessToken);
+        const readingSessionResponse = await updateReadingSession(readingSession?.id??"", choiceId??"", accessToken??"");
 
         console.log(readingSessionResponse.data, readingSessionResponse.status)
 
@@ -37,7 +37,7 @@ export default function Read(props: any){
     }
 
     const handleRestartClick = async () => {
-        const readingSessionResponse = await restartReadingSession(readingSession?.id??"", accessToken);
+        const readingSessionResponse = await restartReadingSession(readingSession?.id??"", accessToken??"");
 
         if(readingSessionResponse.status == 200){
             console.log("Restart response", readingSessionResponse.data);
@@ -47,10 +47,10 @@ export default function Read(props: any){
 
     return(
         <>
-            <div className="mt-24 w-1/2 mx-auto">
+            <div className="mt-10 xl:mt-24 lg:w-2/3 xl:w-1/2 mx-auto">
                 <div className="w-full bg-white pt-6 px-10 flex flex-col items-center mb-4">
-                    <p className="text-xl w-full whitespace-pre-wrap">{readingSession?.chapter.content}</p>
-                    <div className={'flex flex-col justify-center items-center my-20 space-y-6 w-1/2'}>
+                    <p className="text-lg xl:text-xl w-full whitespace-pre-wrap">{readingSession?.chapter.content}</p>
+                    <div className={'flex flex-col justify-center items-center my-20 space-y-6 w-full xl:w-1/2'}>
                         {readingSession?.chapter.isFinalChapter? (
                             <>
                                 <p className={'text-xl w-full'}>You reached the end of the story</p>
