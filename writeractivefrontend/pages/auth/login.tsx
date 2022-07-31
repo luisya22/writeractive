@@ -5,6 +5,7 @@ import PasswordField from "../../components/PasswordField/PasswordField";
 import {login, LoginRequest} from "../../http/authService";
 import {useAuthentication} from "../../context/AuthContext";
 import {useRouter} from "next/router";
+import Link from "next/link";
 
 export default function LonginForm(props: any){
 
@@ -12,7 +13,7 @@ export default function LonginForm(props: any){
 
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const {setAuthenticationToken, accessToken} = useAuthentication();
+    const {setAuthenticationToken,accessToken} = useAuthentication();
     const router = useRouter();
 
     const handleLogin = async () => {
@@ -46,7 +47,7 @@ export default function LonginForm(props: any){
                     <FormValidationProvider onSubmit={handleLogin} id={'login-form'}>
                         <div className={'w-ful flex flex-col items-center'}>
                             <h1 className={'text-4xl font-bold'}>Log In</h1>
-                            <p className={'mt-2 text-center'}>Not registered yet? <span className={'text-main-color'}>Create an account</span></p>
+                            <p className={'mt-2 text-center'}>Not registered yet? <Link href={'/auth/register'}><span className={'text-main-color cursor-pointer'}>Create an account</span></Link></p>
                         </div>
                         <div className="flex flex-col items-center w-full mt-10 space-y-6 px-6">
                             <div className="form-group w-full flex flex-col items-center justify-center">

@@ -35,12 +35,13 @@ export function AuthProvider(props: {children: any, router: any}): any{
     const router = useRouter();
 
     const setAuthenticationToken = (authenticationToken: string|null) => {
+
         setAccessToken(authenticationToken);
     }
 
     const setAuthenticationUser = (authUser: any) => {
         console.log("Setting User", authUser);
-        setAuthenticationUser(authUser);
+        setUser(authUser);
     }
 
     const providerValue: authenticationContextType = {
@@ -159,4 +160,5 @@ const protectedRoutes = [
     "/engine/stories/[id]/edit-story",
     "/engine/stories/[id]/edit-chapters",
     "/engine/stories/[id]/test-story",
+    "/stories"
 ]

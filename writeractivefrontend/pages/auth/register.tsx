@@ -5,6 +5,7 @@ import {login, register, RegisterRequest} from "../../http/authService";
 import {FormValidationProvider} from "../../context/FormValidationContext";
 import InputField from "@/components/InputField/InputField";
 import PasswordField from "@/components/PasswordField/PasswordField";
+import Link from "next/link";
 
 export default function RegisterForm(props: any){
 
@@ -61,7 +62,7 @@ export default function RegisterForm(props: any){
                     <FormValidationProvider onSubmit={handleRegister} id={'register-form'}>
                         <div className={'w-ful flex flex-col items-center'}>
                             <h1 className={'text-4xl font-bold'}>Create Account</h1>
-                            <p className={'mt-2 text-center'}>Already have an account? <span className={'text-main-color'}>Sign In</span></p>
+                            <p className={'mt-2 text-center'}>Already have an account? <Link href={"/auth/login"}><span className={'text-main-color cursor-pointer'}>Sign In</span></Link></p>
                         </div>
                         <div className="flex flex-col items-center w-full mt-10 space-y-6 px-6">
                             <div className="form-group w-full flex flex-col items-center justify-center">

@@ -11,15 +11,14 @@ export default function Logout(props: any){
     useEffect(() => {
         const logoutRequest = async () => {
             const logoutResponse = await logout();
-
+            console.log("Logging out");
             if(logoutResponse.status == 200){
 
-                console.log("Logging out");
+
                 setAuthenticationToken(null);
-                // await setAuthenticationUser(null);
-                await router.push('/auth/login');
+                setAuthenticationUser({});
             }
         }
-        logoutRequest().catch(console.error);
+        logoutRequest().then(() => router.push('/auth/login')).catch(console.error);
     },[]);
 }
