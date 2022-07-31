@@ -1,16 +1,16 @@
 .sidebar{
-  @apply duration-300 relative  h-screen bg-gradient-to-b from-main-color to-end-gradient-color;
+  @apply fixed lg:static top-0 left-0 duration-300 h-screen bg-gradient-to-b from-main-color to-end-gradient-color z-50;
 
   .sidebarContent{
-    @apply flex flex-col justify-center items-center;
+    @apply relative flex flex-col justify-center items-center;
 
     .sidebarHeader{
       @apply mt-10 flex flex-col items-center;
       .title{
-        @apply text-4xl font-bold text-white;
+        @apply text-2xl lg:text-4xl font-bold text-white;
       }
       .subTitle{
-        @apply text-3xl text-white;
+        @apply text-2xl lg:text-3xl text-white;
       }
     }
 
@@ -42,11 +42,11 @@ li{
     @apply flex items-center w-full space-x-4 cursor-pointer hover:bg-gray-600 hover:opacity-75 py-4;
 
     .navLogo{
-      @apply h-7 w-7;
+      @apply h-5 w-5 lg:h-7 lg:w-7;
     }
 
     .navText{
-      @apply text-2xl font-bold text-white;
+      @apply text-xl lg:text-2xl font-bold text-white;
     }
   }
 }
@@ -55,4 +55,11 @@ li{
   @apply flex justify-start items-center w-full space-x-4 cursor-pointer;
 }
 
+.menuIcon{
+  @apply h-7 w-7;
+}
+
+.closeIcon{
+  @apply h-5 w-5;
+}
 

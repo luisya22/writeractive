@@ -10,10 +10,6 @@ A
 T
 $components/ChoiceForm/ChoiceForm.tsx,5/3/53cdfc42b6c7f61364b70225dfafbb598bbda460
 X
-(pages/engine/stories/[id]/edit-story.tsx,2/6/26b65b905cc46f7ab667aea4f297b0c3b56de4b4
-S
-#pages/engine/stories/myreadings.tsx,3/3/33f14c11e367c4dcbbf0828669dc0348ae83b191
-X
 (pages/engine/stories/[id]/test-story.tsx,1/4/141f807b8f4662f932dd7bb53d041e1c90de477a
 >
 types/types.ts,3/5/353ee6ebceb4d469d913e7558b730312d92d5199

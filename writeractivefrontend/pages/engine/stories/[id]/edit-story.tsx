@@ -24,7 +24,7 @@ export default function StoryCreationForm(props: any){
 
     useEffect(() => {
         const getStory = async () => {
-            const response = await getStoryById(props.storyId, accessToken);
+            const response = await getStoryById(props.storyId, accessToken??"");
 
             if(response.status == 200){
                 setStory(response.data);

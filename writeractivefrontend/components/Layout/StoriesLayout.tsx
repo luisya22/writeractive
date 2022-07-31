@@ -20,9 +20,9 @@ export default function StoriesLayout(props:{
 
     return (
         <>
-            <main className={'w-screen flex'}>
+            <main className={'w-screen lg:flex'}>
                 <StoriesSideBar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}/>
-                <div className={`h-screen overflow-auto w-auto flex-1 relative`}>
+                <div className={`h-screen overflow-auto w-auto w-full lg:flex-1 relative ${openSidebar ? 'bg-gray-600 lg:bg-background-color opacity-75 lg:opacity-100' : ''}`}>
                     {props.children}
 
                     <footer className={styles.footer}>
