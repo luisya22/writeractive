@@ -384,7 +384,6 @@ export default function EnginePage(props: any){
                             <button className={'flex items-center text-white'}><img className={'w-5 h-5 mr-1'} src={'/zoom-out.png'} alt={'plusIcon'}
                             />Zoom Out</button>
                         </div>
-                        <p className={'text-white'}>{zoom}</p>
                     </div>
 
                 </nav>
