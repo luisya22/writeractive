@@ -15,7 +15,7 @@ export const EngineNavbar = () => {
     };
 
     const handleTitleClick = () => {
-        window.location.href = window.location.origin
+        router.push("/engine");
     }
 
     return (

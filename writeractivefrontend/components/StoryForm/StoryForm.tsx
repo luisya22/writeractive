@@ -54,7 +54,7 @@ const StoryForm: FC<StoryFormProps> = (
             language
         }
 
-        const storyResponse = await saveStory(data, accessToken);
+        const storyResponse = await saveStory(data, accessToken??"");
 
         if(storyResponse.status == 200){
             await router.push("/engine/stories/" + storyResponse.data.id + "/edit-chapters");
@@ -76,9 +76,9 @@ const StoryForm: FC<StoryFormProps> = (
 
     return (
         <>
-            <div className="container w-2/3 mx-auto">
-                <div className={'flex justify-center mt-10'}>
-                    <div className="w-1/3 px-10">
+            <div className="container w-full xl:w-2/3 mx-auto my-20">
+                <div className={'flex flex-wrap justify-center mt-10'}>
+                    <div className="w-full md:w-1/3 px-10 mb-4 xl:mb-0">
                         <Image src={ coverPage ? `https://res.cloudinary.com/demo/image/fetch/${coverPage}` : '/img.png'}
                                width={'8'}
                                height={'13'}
@@ -86,7 +86,7 @@ const StoryForm: FC<StoryFormProps> = (
                                layout={'responsive'}
                         />
                     </div>
-                    <div className="w-2/3">
+                    <div className="w-full md:w-2/3">
                         <div className={'bg-white px-4 py-10 rounded-xl'}>
                             <h1 className={'text-2xl font-bold mb-10'}>Story Details</h1>
                             <FormValidationProvider id={"story-form"} onSubmit={handleStoryCreate}>

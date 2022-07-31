@@ -6,7 +6,7 @@ export default function EngineLayout(props:{
 
     return (
         <>
-            <header className={'bg-main-dark-color shadow w-full mx-auto absolute top-0 z-[100]'}>
+            <header className={'bg-main-dark-color shadow w-full mx-auto sticky top-0 z-[100]'}>
                 <EngineNavbar/>
             </header>
 

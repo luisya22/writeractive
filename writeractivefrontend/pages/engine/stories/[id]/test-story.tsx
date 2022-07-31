@@ -104,10 +104,10 @@ export default function StoryTest(props: any){
                     </div>
                 </nav>
             </div>
-            <div className={'mt-24 w-1/2 mx-auto flex justify-center'}>
+            <div className={'mt-24 w-full lg:w-2/3 xl:w-1/2 mx-auto flex flex-wrap justify-center'}>
                 <p className={'pb-10 text-blue-600 cursor-pointer mt-5'} onClick={() => handleUndoClick()}><img className={'w-8 h-8'} src={'/undo-black.png'} alt={"Undo Icon"}/></p>
-                <div className="w-11/12 mx-auto bg-white  py-6 px-10 flex flex-col items-center">
-                    <p className={'text-xl w-full whitespace-pre-wrap'}>{actualChapter?.content}</p>
+                <div className="w-full lg:w-11/12 mx-auto bg-white py-6 px-10 flex flex-col items-center">
+                    <p className={'text-lg xl:text-xl w-full whitespace-pre-wrap'}>{actualChapter?.content}</p>
                     <div className={'flex flex-col justify-center items-center my-20 space-y-6 w-1/2'}>
                         {actualChapter?.choices.map(choice => (
                             <>

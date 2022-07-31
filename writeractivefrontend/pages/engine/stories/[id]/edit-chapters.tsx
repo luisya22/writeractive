@@ -61,7 +61,7 @@ export default function EnginePage(props: any){
     useEffect(() =>{
 
         const getStory = async () => {
-            const response = await getStoryById(props.storyId, accessToken);
+            const response = await getStoryById(props.storyId, accessToken??"");
 
             if(response.status == 200){
                 setStory(response.data)
@@ -69,7 +69,7 @@ export default function EnginePage(props: any){
         }
 
         const getChapters = async () => {
-            const response = await getChaptersByStory(props.storyId, accessToken);
+            const response = await getChaptersByStory(props.storyId, accessToken??"");
 
             if(response.status == 200){
                 setChapters(response.data);
@@ -125,7 +125,7 @@ export default function EnginePage(props: any){
             isFinalChapter: chaptersTemp[chapterIndex].isFinalChapter
         }
 
-        const chapterResponse = await updateChapter(props.storyId, data, accessToken);
+        const chapterResponse = await updateChapter(props.storyId, data, accessToken??"");
     }
     
     const handleEditChapter = async (chapter: Chapter, index: number) =>{
@@ -152,7 +152,7 @@ export default function EnginePage(props: any){
             isFinalChapter: isFinalChapter
         }
 
-        const chapterResponse = await updateChapter(props.storyId, data, accessToken);
+        const chapterResponse = await updateChapter(props.storyId, data, accessToken??"");
 
         if(chapterResponse.status != 200){
             return;
@@ -207,7 +207,7 @@ export default function EnginePage(props: any){
             positionY: positionY
         }
 
-        const chapterResponse = await saveChapter(props.storyId, data, accessToken);
+        const chapterResponse = await saveChapter(props.storyId, data, accessToken??"");
 
         if(chapterResponse.status != 200){
             return; //TODO: Alert
@@ -256,7 +256,7 @@ export default function EnginePage(props: any){
         const choice = chapter.choices[choiceIndex];
 
 
-        const choiceResponse = await deleteChoice(chapter.id, choice.id, accessToken);
+        const choiceResponse = await deleteChoice(chapter.id, choice.id, accessToken??"");
 
 
         if(choiceResponse.status != 200){
@@ -278,7 +278,7 @@ export default function EnginePage(props: any){
 
         const tempChapters = chapters;
 
-        const chapterResponse = await deleteChapter(props.storyId, selectedChapter.id??"", accessToken);
+        const chapterResponse = await deleteChapter(props.storyId, selectedChapter.id??"", accessToken??"");
 
         if(chapterResponse.status != 200){
             return; //TODO: Alert
@@ -297,7 +297,7 @@ export default function EnginePage(props: any){
             return; //TODO: Alert
         }
 
-        const storyResponse = await saveFirstChapter(props.storyId, selectedChapter.id, accessToken);
+        const storyResponse = await saveFirstChapter(props.storyId, selectedChapter.id, accessToken??"");
 
         if(storyResponse.status == 200){
             setStory(storyResponse.data);
@@ -307,7 +307,7 @@ export default function EnginePage(props: any){
     }
 
     const handleStoryPublish = async () => {
-        const storyResponse = await publishStory(props.storyId, accessToken);
+        const storyResponse = await publishStory(props.storyId, accessToken??"");
 
         if(storyResponse.status == 200){
             setStory(storyResponse.data);
