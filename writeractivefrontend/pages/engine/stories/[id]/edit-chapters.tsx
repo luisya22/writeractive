@@ -16,6 +16,7 @@ import {
 } from "../../../../http/storyService";
 import {useAuthentication} from "../../../../context/AuthContext";
 import Link from "next/link";
+import {transform} from "next/dist/build/swc";
 
 const Xarrow = dynamic(() => import('react-xarrows'), {
     ssr: false
@@ -57,6 +58,7 @@ export default function EnginePage(props: any){
     const [selectedChapter, setSelectedChapter] = useState<Chapter>(defaultChapter);
     const [selectedChapterIndex, setSelectedChapterIndex] = useState<number>(-1)
     const [firstChapter, setFirstChapter] = useState<Chapter>(defaultChapter);
+    const [zoom, setZoom] = useState<number>(1);
 
     useEffect(() =>{
 
@@ -316,6 +318,29 @@ export default function EnginePage(props: any){
         //TODO: Alert updated
     }
 
+    const handleZoomOut = () => {
+        if(zoom != 0.1){
+            let newZoom = zoom - 0.1;
+
+            if(newZoom < 0.1){
+                newZoom = 0.1
+            }
+            setZoom(newZoom);
+        }
+    }
+
+    const handleZoomIn = () => {
+        if(zoom != 1){
+            let newZoom = zoom + 0.1;
+
+            if(newZoom > 1){
+                newZoom = 1
+            }
+
+            setZoom(newZoom);
+        }
+    }
+
     const startCircleStyle: React.CSSProperties = {
         position: "absolute",
         top: firstChapter.positionY??100,
@@ -325,29 +350,43 @@ export default function EnginePage(props: any){
     return(
         <>
             <div className={'bg-main-dark-color shadow w-full mx-auto sticky top-0' }>
-                <nav className={'border-t border-light flex justify-start space-x-2 items-center flex-wrap px-4 '}>
-                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleNewChapter}>
-                        <button
-                            className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/plus.png'} alt={'plusIcon'}
-                        />New</button>
+                <nav className={'border-t border-light flex justify-between items-center flex-wrap px-4 '}>
+                    <div className={'flex justify-start space-x-2 items-center flex-wrap px-4'}>
+                        <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleNewChapter}>
+                            <button
+                                className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/plus.png'} alt={'plusIcon'}
+                            />New</button>
+                        </div>
+                        <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleStoryPublish}>
+                            <button className={['flex items-center text-white', story?.published ? "opacity-75 bg-gray-600": ""].join(" ")}><img className={'w-3 h-3 mr-1'} src={'/edit.png'} alt={'plusIcon'}
+                            />{story?.published ? "Published" : "Publish"}</button>
+                        </div>
+                        <div>
+                            <Link href={`/engine/stories/${props.storyId}/test-story`} className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
+                                <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}
+                                />Test Story</button>
+                            </Link>
+                        </div>
+                        <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleFirstChapter}>
+                            <button className={'flex items-center text-white'}><img className={'w-5 h-5 mr-1'} src={'/play.png'} alt={'plusIcon'}
+                            />Select as First Chapter</button>
+                        </div>
+                        <div className={'hover:bg-gray-600 self-end hover:opacity-75 px-4 py-2'}>
+                            <button className={'flex items-center text-white'}>Chapters: {chapters?.length}</button>
+                        </div>
                     </div>
-                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleStoryPublish}>
-                        <button className={['flex items-center text-white', story?.published ? "opacity-75 bg-gray-600": ""].join(" ")}><img className={'w-3 h-3 mr-1'} src={'/edit.png'} alt={'plusIcon'}
-                        />{story?.published ? "Published" : "Publish"}</button>
+                    <div className={'flex justify-start space-x-2 items-center flex-wrap px-4'}>
+                        <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleZoomIn}>
+                            <button className={'flex items-center text-white'}><img className={'w-5 h-5 mr-1'} src={'/zoom-in.png'} alt={'plusIcon'}
+                            />Zoom In</button>
+                        </div>
+                        <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleZoomOut}>
+                            <button className={'flex items-center text-white'}><img className={'w-5 h-5 mr-1'} src={'/zoom-out.png'} alt={'plusIcon'}
+                            />Zoom Out</button>
+                        </div>
+                        <p className={'text-white'}>{zoom}</p>
                     </div>
-                    <div>
-                        <Link href={`/engine/stories/${props.storyId}/test-story`} className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'}>
-                            <button className={'flex items-center text-white'}><img className={'w-3 h-3 mr-1'} src={'/test.png'} alt={'plusIcon'}
-                            />Test Story</button>
-                        </Link>
-                    </div>
-                    <div className={'hover:bg-gray-600 hover:opacity-75 px-4 py-2'} onClick={handleFirstChapter}>
-                        <button className={'flex items-center text-white'}><img className={'w-5 h-5 mr-1'} src={'/play.png'} alt={'plusIcon'}
-                        />Select as First Chapter</button>
-                    </div>
-                    <div className={'hover:bg-gray-600 self-end hover:opacity-75 px-4 py-2'}>
-                        <button className={'flex items-center text-white'}>Chapters: {chapters?.length}</button>
-                    </div>
+
                 </nav>
             </div>
             <div>
@@ -357,39 +396,41 @@ export default function EnginePage(props: any){
                             sensors={sensors}
                         >
                            <div ref={ref} {...events} className={'overflow-scroll scrollbar-hide relative h-[90vh] w-100 flex box-border'}>
-                               {chapters?.map((chapter, index) =>{
-                                   return(
-                                       <div key={chapter.id}>
-                                           <ChapterBoxDraggable
-                                               chapter={chapter}
-                                               selected={chapter.id == selectedChapter.id}
-                                               onChapterClick={handleSetSelectedChapter}
-                                               index={index}
-                                           />
+                               <div style={{zoom: zoom}}>
+                                   {chapters?.map((chapter, index) =>{
+                                       return(
+                                           <div key={chapter.id}>
+                                               <ChapterBoxDraggable
+                                                   chapter={chapter}
+                                                   selected={chapter.id == selectedChapter.id}
+                                                   onChapterClick={handleSetSelectedChapter}
+                                                   index={index}
+                                               />
 
-                                           {chapter.choices.map((choice, index) =>{
-                                               return(
-                                                   <>
-                                                       {choice.nextChapterId != null ? (
-                                                           <Xarrow key={choice.id + '-' + index} start={choice.parentChapterId??""} end={choice.nextChapterId??""}/>
-                                                       ):null}
-                                                   </>
-                                               )
-                                           })}
+                                               {chapter.choices.map((choice, index) =>{
+                                                   return(
+                                                       <>
+                                                           {choice.nextChapterId != null ? (
+                                                               <Xarrow key={choice.id + '-' + index} start={choice.parentChapterId??""} end={choice.nextChapterId??""}/>
+                                                           ):null}
+                                                       </>
+                                                   )
+                                               })}
 
-                                       </div>
-                                   )
-                               })}
-                               {story?.firstChapterId != null ? (
-                                   <>
-                                       <div id={'startCircle'} className={'rounded-full h-24 w-24 bg-main-color text-white shadow flex justify-center items-center'} style={startCircleStyle}>
-                                            <div>
-                                                <h3 className={'text-2xl font-bold'}>Start</h3>
-                                            </div>
-                                       </div>
-                                       <Xarrow  start={"startCircle"} end={firstChapter.id??""}/>
-                                   </>
-                               ): null}
+                                           </div>
+                                       )
+                                   })}
+                                   {story?.firstChapterId != null ? (
+                                       <>
+                                           <div id={'startCircle'} className={'rounded-full h-24 w-24 bg-main-color text-white shadow flex justify-center items-center'} style={startCircleStyle}>
+                                               <div>
+                                                   <h3 className={'text-2xl font-bold'}>Start</h3>
+                                               </div>
+                                           </div>
+                                           <Xarrow  start={"startCircle"} end={firstChapter.id??""}/>
+                                       </>
+                                   ): null}
+                               </div>
                            </div>
                         </DndContext>
                     </Xwrapper>
