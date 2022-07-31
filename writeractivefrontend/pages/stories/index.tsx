@@ -23,8 +23,8 @@ export default function EngineMainPage(props: any) {
     return (
         <>
             <div className={'container mx-auto flex flex-col'}>
-                <div className={'px-0 lg:px-40'}>
-                    <div className={'w-full bg-main-dark-color my-24 lg:rounded-xl p-10 flex flex-wrap items-center'}>
+                <div className={'px-0 lg:px-20 xl:px-40'}>
+                    <div className={'w-full bg-main-dark-color my-24 md:rounded-xl p-10 flex flex-wrap items-center'}>
                         <div className={'w-full sm:w-2/3'}>
                             <h1 className={'text-3xl text-white fond-bold mb-4'}>Create your Story</h1>
                             <p className={'text-gray-300'}>Join thousands of writers who are creating sci-fi, fantasy and all types of interactive fictions. Try Writeractive Engine Today!</p>
@@ -35,10 +35,10 @@ export default function EngineMainPage(props: any) {
                             </Link>
                         </div>
                     </div>
-                    <div className={'flex flex-wrap w-full'}>
+                    <div className={'flex flex-wrap items-start w-full -mb-4'}>
                         {stories.map(story => (
                             <>
-                                <div className={'w-1/4 px-6'}>
+                                <div className={'w-1/2 md:w-1/4 px-6 h-full mb-4'}>
                                     <div className={'flex flex-col'}>
                                         <Link href={`/stories/readings/${story.id}/create`}>
                                             <div className={'mb-4 relative hover:bg-black hover:opacity-75 cursor-pointer transition ease-in-out delay-150 hover:scale-110 duration-300'}>
@@ -51,7 +51,7 @@ export default function EngineMainPage(props: any) {
                                             </div>
                                         </Link>
                                         <div className={'flex flex-col items-center justify-center'}>
-                                            <h4 className={'text-2xl font-bold'}>{story.title}</h4>
+                                            <h4 className={'text-xl text-center xl:text-2xl font-bold'}>{story.title}</h4>
                                             <p className={'text-xl text-gray-600'}>{story?.owner?.username}</p>
                                         </div>
                                     </div>
