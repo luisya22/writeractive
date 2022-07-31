@@ -20,7 +20,7 @@ export const MainNavbar = () => {
     return (
         <>
             <nav className='flex justify-between items-center flex-wrap mx-auto px-4 py-3 w-full container'>
-                <div onClick={handleTitleClick}>
+                <div onClick={handleTitleClick} className={'cursor-pointer'}>
                     <h1 className={'text-4xl text-main-color font-medium'}>Writeractive</h1>
                 </div>
                 <div className={'flex space-x-2'}>
