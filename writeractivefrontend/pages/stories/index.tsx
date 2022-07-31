@@ -23,13 +23,13 @@ export default function EngineMainPage(props: any) {
     return (
         <>
             <div className={'container mx-auto flex flex-col'}>
-                <div className={'px-40'}>
-                    <div className={'w-full bg-main-dark-color my-24 rounded-xl p-10 flex flex-wrap items-center'}>
-                        <div className={'w-2/3'}>
+                <div className={'px-0 lg:px-40'}>
+                    <div className={'w-full bg-main-dark-color my-24 lg:rounded-xl p-10 flex flex-wrap items-center'}>
+                        <div className={'w-full sm:w-2/3'}>
                             <h1 className={'text-3xl text-white fond-bold mb-4'}>Create your Story</h1>
                             <p className={'text-gray-300'}>Join thousands of writers who are creating sci-fi, fantasy and all types of interactive fictions. Try Writeractive Engine Today!</p>
                         </div>
-                        <div className={'w-1/3 flex justify-end'}>
+                        <div className={'w-full md:w-1/3 md:flex md:justify-end mt-10 md:mt-0'}>
                             <Link passHref href={'/engine'}>
                                 <button className={'btn btn-primary'}> Write a New Story</button>
                             </Link>

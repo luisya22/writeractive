@@ -38,13 +38,13 @@ export default function StoryTest(props: any){
 
     useEffect(() => {
         const getStory = async () => {
-            const response = await getStoryById(props.storyId, accessToken);
+            const response = await getStoryById(props.storyId, accessToken??"");
 
             if(response.status == 200){
                 setStory(response.data);
             }
 
-            const chapterResponse = await getChaptersByStory(props.storyId, accessToken);
+            const chapterResponse = await getChaptersByStory(props.storyId, accessToken??"");
 
             if(chapterResponse.status == 200){
                 setChapters(chapterResponse.data);
