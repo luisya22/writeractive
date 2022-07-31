@@ -13,8 +13,10 @@ export default function Logout(props: any){
             const logoutResponse = await logout();
 
             if(logoutResponse.status == 200){
+
+                console.log("Logging out");
                 setAuthenticationToken(null);
-                setAuthenticationUser({});
+                // await setAuthenticationUser(null);
                 await router.push('/auth/login');
             }
         }

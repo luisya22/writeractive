@@ -39,6 +39,7 @@ export function AuthProvider(props: {children: any, router: any}): any{
     }
 
     const setAuthenticationUser = (authUser: any) => {
+        console.log("Setting User", authUser);
         setAuthenticationUser(authUser);
     }
 
@@ -81,22 +82,22 @@ export function AuthProvider(props: {children: any, router: any}): any{
             }
         );
 
-    },[props.router.pathname, accessToken])
+    },[props.router.pathname, accessToken]);
+
+    const getUserInfo = async () => {
+
+        const userInfoResponse = await getUser(accessToken);
+
+        if(userInfoResponse.status == 200){
+            setUser(userInfoResponse.data);
+        }
+    }
 
     useEffect(() =>{
-        const getUserInfo = async () => {
 
-            console.log("Getting User");
-            const userInfoResponse = await getUser(accessToken);
 
-            if(userInfoResponse.status == 200){
-                setUser(userInfoResponse.data);
-            }
-        }
-
-        console.log("User", user.id == null, accessToken!=null, user);
-
-        if(user.id == null && accessToken != null){
+        if(user.id == null && accessToken != null && !router.pathname.startsWith('/auth')){
+            console.log("Get User Info", router.pathname);
             getUserInfo().catch(console.error)
         }
     })

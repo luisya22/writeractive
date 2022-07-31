@@ -56,12 +56,12 @@ export default function RegisterForm(props: any){
 
     return(
         <>
-            <div className={'absolute h-[90vh] flex justify-center items-center   w-full'}>
-                <div className={'bg-white px-4 py-10 rounded-xl w-1/4'}>
-                    <FormValidationProvider onSubmit={handleRegister} id={'login-form'}>
+            <div className={'absolute h-[90vh] flex justify-center items-center w-full px-2 sm:px-0'}>
+                <div className={'bg-white px-4 py-10 rounded-xl xl:w-1/4'}>
+                    <FormValidationProvider onSubmit={handleRegister} id={'register-form'}>
                         <div className={'w-ful flex flex-col items-center'}>
                             <h1 className={'text-4xl font-bold'}>Create Account</h1>
-                            <p className={'mt-2'}>Already have an account? <span className={'text-main-color'}>Sign In</span></p>
+                            <p className={'mt-2 text-center'}>Already have an account? <span className={'text-main-color'}>Sign In</span></p>
                         </div>
                         <div className="flex flex-col items-center w-full mt-10 space-y-6 px-6">
                             <div className="form-group w-full flex flex-col items-center justify-center">
