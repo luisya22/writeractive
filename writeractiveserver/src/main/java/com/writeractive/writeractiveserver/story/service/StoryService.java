@@ -132,7 +132,7 @@ public class StoryService {
     public List<StoryDto> getAll(){
         //TODO: Make pagination
 
-        return storyRepository.findAll()
+        return storyRepository.findAllByPublishedTrue()
                 .stream()
                 .map(storyDtoMapper::convertToDto)
                 .toList();

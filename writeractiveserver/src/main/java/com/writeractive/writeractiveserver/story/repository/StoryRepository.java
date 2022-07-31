@@ -14,4 +14,5 @@ public interface StoryRepository extends JpaRepository<Story, UUID> {
 
     Optional<Story> getStoriesBySlug(String slug);
     List<Story> getStoriesByOwnerId(Long userId);
+    List<Story> findAllByPublishedTrue();
 }
