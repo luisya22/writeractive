@@ -8,6 +8,6 @@ Writeractive is a website and MIT license open source project where users can cr
 
 # Important Links
 1. [Website](https://writeractive.luismatosgarcia.dev)
-2. [Blog](https://writeractive.luismatosgarcia.dev)
+2. [Blog](https://luismatos.hashnode.dev/introducing-writeractive-the-site-to-create-or-read-interactive-stories)
 
 Thanks to [PlanetScale](https://planetscale.com) and [Hashnode](https://hashnode.com) for the opportunity provided.
